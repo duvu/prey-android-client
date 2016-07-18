@@ -116,6 +116,8 @@ public class JSONParser {
         //	json = "[ {\"command\": \"start\",\"target\": \"detach\",\"options\": {}}]";
 
 
+        json="[{\"command\":\"get\",\"target\":\"status\",\"options\":null}]";
+
         if ("[]".equals(json)) {
             return null;
         }

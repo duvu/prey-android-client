@@ -37,10 +37,11 @@ public class PreyHttpResponse {
     public PreyHttpResponse(int  statusCode,String responseAsString) {
 
         try {
+            PreyLogger.d("statusCode:"+statusCode+" responseAsString:"+responseAsString);
             this.response=null;
             this.statusCode = statusCode;
             this.responseAsString = responseAsString;
-            PreyLogger.d("responseAsString:"+responseAsString);
+
         } catch (Exception e) {
             PreyLogger.d("Can't receive body stream from http connection, setting response string as ''");
             this.responseAsString = "";

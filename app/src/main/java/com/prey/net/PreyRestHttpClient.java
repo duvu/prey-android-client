@@ -7,10 +7,13 @@
 package com.prey.net;
 
 
+import java.io.BufferedReader;
 import java.io.File;
 
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
@@ -171,7 +174,25 @@ public class PreyRestHttpClient {
     }
 
 
-
-
+    public String getExternalIp(String uri) {
+        String ip = null;
+        InputStreamReader stream = null;
+        BufferedReader in = null;
+        try {
+            URL url = new URL(uri);
+            HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
+            stream=new InputStreamReader(url.openStream());
+            in = new BufferedReader(stream);
+            ip = in.readLine();
+        } catch (Exception e) {
+            if(in!=null){
+                try { in.close();} catch (Exception e1) {}
+            }
+            if(stream!=null){
+                try { stream.close();} catch (Exception e1) {}
+            }
+        }
+        return ip;
+    }
 
 }

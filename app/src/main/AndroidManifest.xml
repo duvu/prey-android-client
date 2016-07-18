@@ -396,6 +396,9 @@
         <service android:name="com.prey.actions.geofences.GeofenceIntentService" />
         <service android:name="com.prey.actions.fileretrieval.FileretrievalService" />
 
+
+        <service android:name="com.prey.actions.status.StatusService" />
+
     </application>
 
 </manifest>

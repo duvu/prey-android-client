@@ -6,6 +6,8 @@
  ******************************************************************************/
 package com.prey.actions.battery;
 
+import android.os.BatteryManager;
+
 public class Battery {
 
     private int health;
@@ -19,6 +21,45 @@ public class Battery {
     private int temperature;
     private int voltage;
     private boolean charging;
+    private float percentage;
+
+    private boolean usbCharge;
+    private boolean acCharge;
+    private boolean connected;
+
+
+    public float getPercentage() {
+        return percentage;
+    }
+
+    public void setPercentage(float percentage) {
+        this.percentage = percentage;
+    }
+
+
+    public boolean isUsbCharge() {
+        return usbCharge;
+    }
+
+    public void setUsbCharge(boolean usbCharge) {
+        this.usbCharge = usbCharge;
+    }
+
+    public boolean isAcCharge() {
+        return acCharge;
+    }
+
+    public void setAcCharge(boolean acCharge) {
+        this.acCharge = acCharge;
+    }
+
+    public boolean isConnected() {
+        return connected;
+    }
+
+    public void setConnected(boolean connected) {
+        this.connected = connected;
+    }
 
     public boolean isCharging() {
         return charging;

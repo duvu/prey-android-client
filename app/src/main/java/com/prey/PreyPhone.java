@@ -12,8 +12,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.RandomAccessFile;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -21,24 +19,30 @@ import java.util.Map;
 import java.util.List;
 
 
-
+import com.prey.actions.battery.Battery;
+import com.prey.backwardcompatibility.AboveCupcakeSupport;
 import com.prey.managers.PreyConnectivityManager;
 import com.prey.net.PreyWebServices;
 
-import android.*;
+
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.ActivityManager.MemoryInfo;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.DhcpInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.BatteryManager;
 import android.os.Build;
-import android.os.Debug;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
+import android.telephony.PhoneStateListener;
+import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 
 public class PreyPhone {
@@ -47,22 +51,45 @@ public class PreyPhone {
     private Hardware hardware;
     private List<Wifi> listWifi;
     private Wifi wifi;
+    private Mobile mobile;
+    private Battery battery;
+    private String externalIp=null;
 
     public PreyPhone(Context ctx) {
         this.ctx = ctx;
         init();
     }
 
-    public static String TAG = "memory";
-
     private void init() {
         updateHardware();
         updateListWifi();
         updateWifi();
-        update3g();
     }
 
-    private void update3g() {
+    public void updateAll() {
+        updateMobile();
+        updateBattery();
+        updateExternalIp();
+    }
+
+    private void updateExternalIp(){
+        try{
+            externalIp=PreyWebServices.getInstance().getExternalIp(ctx);
+        }catch (Exception e){}
+    }
+
+    private void updateBattery(){
+        MyBatteryBroadcastReceiver batteryLevelReceiver = new MyBatteryBroadcastReceiver();
+        IntentFilter batteryLevelFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        ctx.registerReceiver(batteryLevelReceiver, batteryLevelFilter);
+    }
+
+    private void updateMobile() {
+        TelephonyManager telephonyManager = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
+        mobile = new Mobile();
+        mobile.setOperatorName(telephonyManager.getNetworkOperatorName());
+        telephonyManager.listen(new CustomPhoneStateListener(), PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+
     }
 
     private void updateHardware() {
@@ -82,13 +109,17 @@ public class PreyPhone {
         hardware.setRamSize(String.valueOf(getMemoryRamSize()));
         // hardware.setRamModules(ramModules);
         hardware.setSerialNumber(getSerialNumber());
+        hardware.setDeviceModel(Build.MODEL);
+        hardware.setOsVersion(Build.VERSION.RELEASE);
+
+
 
         initMemory();
-
+        initStorage();
 
     }
 
-    @TargetApi(16)
+
     private void initMemory() {
         ActivityManager activityManager = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
         MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
@@ -98,8 +129,16 @@ public class PreyPhone {
         long freeMemory = memoryInfo.availMem / 1048576L;
         long usageMemory = totalMemory - freeMemory;
         hardware.setTotalMemory(totalMemory);
-        hardware.setFreeMemory(totalMemory);
+        hardware.setFreeMemory(freeMemory);
         hardware.setBusyMemory(usageMemory);
+    }
+
+    private void initStorage() {
+        long totalStorage=Environment.getDataDirectory().getTotalSpace();
+        long freeStorage=Environment.getDataDirectory().getFreeSpace();
+        hardware.setTotalStorage(Environment.getDataDirectory().getTotalSpace());
+        hardware.setFreeStorage(Environment.getDataDirectory().getFreeSpace());
+        hardware.setBusyStorage(totalStorage-freeStorage);
     }
 
     public long totalMemory() {
@@ -115,6 +154,7 @@ public class PreyPhone {
             ir = new InputStreamReader(fi);
             br = new BufferedReader(ir);
             while ((line = br.readLine()) != null) {
+                PreyLogger.i("____"+line);
                 if (line.indexOf("MemTotal") >= 0) {
                     line = line.replace("MemTotal", "");
                     line = line.replace(":", "");
@@ -273,10 +313,19 @@ public class PreyPhone {
         return listWifi;
     }
 
+    public Battery getBattery() {
+        return battery;
+    }
 
     public Wifi getWifi() {
         return wifi;
     }
+
+    public Mobile getMobile() {
+        return mobile;
+    }
+
+    public String getExternalIp() { return externalIp; }
 
     private final static List<Integer> channelsFrequency = new ArrayList<Integer>(Arrays.asList(0, 2412, 2417, 2422, 2427, 2432, 2437, 2442, 2447, 2452, 2457, 2462, 2467, 2472, 2484));
 
@@ -297,7 +346,30 @@ public class PreyPhone {
         private long totalMemory;
         private long freeMemory;
         private long busyMemory;
+        private long totalStorage;
+        private long freeStorage;
+        private long busyStorage;
+
         private String androidDeviceId;
+
+        private String deviceModel;
+        private String osVersion;
+
+        public String getOsVersion() {
+            return osVersion;
+        }
+
+        public void setOsVersion(String osVersion) {
+            this.osVersion = osVersion;
+        }
+
+        public String getDeviceModel() {
+            return deviceModel;
+        }
+
+        public void setDeviceModel(String deviceModel) {
+            this.deviceModel = deviceModel;
+        }
 
         public long getTotalMemory() {
             return totalMemory;
@@ -430,6 +502,69 @@ public class PreyPhone {
         public void setAndroidDeviceId(String androidDeviceId) { this.androidDeviceId = androidDeviceId; }
 
         public String getAndroidDeviceId() { return androidDeviceId; }
+
+        public long getTotalStorage() {
+            return totalStorage;
+        }
+
+        public void setTotalStorage(long totalStorage) {
+            this.totalStorage = totalStorage;
+        }
+
+        public long getFreeStorage() {
+            return freeStorage;
+        }
+
+        public void setFreeStorage(long freeStorage) {
+            this.freeStorage = freeStorage;
+        }
+
+        public long getBusyStorage() {
+            return busyStorage;
+        }
+
+        public void setBusyStorage(long busyStorage) {
+            this.busyStorage = busyStorage;
+        }
+    }
+
+    public class Mobile {
+        private String OperatorName;
+        private int mobileSignal;
+
+        public String getOperatorName() {
+            return OperatorName;
+        }
+
+        public void setOperatorName(String operatorName) {
+            OperatorName = operatorName;
+        }
+
+        public int getMobileSignal() {
+            return mobileSignal;
+        }
+
+        public void setMobileSignal(int mobileSignal) {
+            this.mobileSignal = mobileSignal;
+        }
+    }
+
+
+
+    private class CustomPhoneStateListener extends PhoneStateListener {
+
+        @Override
+        public void onSignalStrengthsChanged(SignalStrength signalStrength) {
+            super.onSignalStrengthsChanged(signalStrength);
+            if (signalStrength.isGsm()) {
+                if (signalStrength.getGsmSignalStrength() != 99)
+                    mobile.setMobileSignal( signalStrength.getGsmSignalStrength() * 2 - 113);
+                else
+                    mobile.setMobileSignal( signalStrength.getGsmSignalStrength());
+            } else {
+                mobile.setMobileSignal(signalStrength.getCdmaDbm());
+            }
+        }
 
     }
 
@@ -610,7 +745,7 @@ public class PreyPhone {
     public String getIPAddress() {
         String ip = "";
         try {
-            ip = PreyWebServices.getInstance().getIPAddress(ctx);
+            ip = PreyWebServices.getInstance().getExternalIp(ctx);
         } catch (Exception e) {
         }
         return ip;
@@ -715,5 +850,59 @@ public class PreyPhone {
     }
 
 
+    private class MyBatteryBroadcastReceiver extends BroadcastReceiver{
+
+        public void onReceive(Context context, Intent intent) {
+            context.unregisterReceiver(this);
+            int health = intent.getIntExtra(BatteryManager.EXTRA_HEALTH, 0);
+            int iconSmall = intent.getIntExtra(BatteryManager.EXTRA_ICON_SMALL, 0);
+            int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+            int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
+            boolean present = intent.getExtras().getBoolean(BatteryManager.EXTRA_PRESENT);
+            int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 0);
+            int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+            String technology = intent.getExtras().getString(BatteryManager.EXTRA_TECHNOLOGY);
+            int temperature = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
+            int voltage = intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 0);
+
+            boolean charging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
+                    status == BatteryManager.BATTERY_STATUS_FULL;
+
+
+            boolean usbCharge = plugged == BatteryManager.BATTERY_PLUGGED_USB;
+            boolean acCharge = plugged == BatteryManager.BATTERY_PLUGGED_AC;
+
+
+            boolean connected = plugged == BatteryManager.BATTERY_PLUGGED_AC || plugged == BatteryManager.BATTERY_PLUGGED_USB;
+
+
+            float batteryPct = level / (float)scale;
+
+
+
+
+            battery = new Battery();
+            battery.setHealth(health);
+            battery.setIconSmall(iconSmall);
+            battery.setLevel(level);
+            battery.setPlugged(plugged);
+            battery.setPresent(present);
+            battery.setScale(scale);
+            battery.setStatus(status);
+            battery.setTechnology(technology);
+            battery.setTemperature(temperature);
+            battery.setVoltage(voltage);
+            battery.setCharging(charging);
+            battery.setPercentage(batteryPct);
+            battery.setUsbCharge(usbCharge);
+            battery.setAcCharge(acCharge);
+            battery.setConnected(connected);
+            PreyLogger.i("MyBattery Plugged:"+battery.getPlugged());
+            PreyLogger.i("MyBattery status:"+battery.getStatus());
+            PreyLogger.i("MyBattery Voltage:"+battery.getVoltage());
+            PreyLogger.i("MyBattery Health:"+battery.getHealth());
+        }
+
+    }
 }
 

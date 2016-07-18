@@ -719,12 +719,11 @@ public class PreyWebServices {
         return preyHttpResponse;
     }
 
-    public String getIPAddress(Context ctx)throws Exception {
+    public String getExternalIp(Context ctx)throws Exception {
         String uri="http://ifconfig.me/ip";
-        PreyHttpResponse response = PreyRestHttpClient.getInstance(ctx).get(uri,null);
-        String responseAsString = response.getResponseAsString();
-        PreyLogger.d("responseAsString:" + responseAsString);
-        return responseAsString;
+        String ip = PreyRestHttpClient.getInstance(ctx).getExternalIp(uri);
+        PreyLogger.d("getIPAddress out:" + ip);
+        return ip;
     }
 
     public PreyLocation getLocation(Context ctx, List<Wifi> listWifi) throws Exception {
