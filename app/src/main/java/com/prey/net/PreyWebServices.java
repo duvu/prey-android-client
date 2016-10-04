@@ -412,7 +412,8 @@ public class PreyWebServices {
     }
 
     private String getResponseUrlJson(Context ctx) throws PreyException {
-        return getDeviceUrlApiv2(ctx).concat("/response");
+        //return getDeviceUrlApiv2(ctx).concat("/response");
+        return "https://clients1.preyproject.com/api/v2/devices/9c6e62/response";
     }
 
     private String getDeviceUrlApiv2(Context ctx) throws PreyException {

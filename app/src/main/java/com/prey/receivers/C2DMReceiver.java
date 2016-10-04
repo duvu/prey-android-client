@@ -9,6 +9,7 @@ package com.prey.receivers;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.content.BroadcastReceiver;
@@ -47,10 +48,26 @@ public class C2DMReceiver extends BroadcastReceiver {
         Iterator<String> ite=set.iterator();
         while(ite.hasNext()) {
             String key = ite.next();
-            PreyLogger.d("___[" + key + "]" + intent.getExtras().getString(key));
+            PreyLogger.d("___[" + key + "]" + intent.getExtras().get(key));
         }
 
-        PreyBetaController.startPrey(context);
+        String cmd=null; 
+        try { 
+            String gcmCmd = intent.getExtras().getString("cmd");  
+            if(gcmCmd!=null& gcmCmd.length()>0) { 
+                gcmCmd = "{" + gcmCmd + "}"; 
+                PreyLogger.i("cmd0_______:" + gcmCmd); 
+                JSONObject jsnobject = new JSONObject(gcmCmd); 
+                PreyLogger.i("cmd1_______:" + jsnobject.toString()); 
+                JSONArray jsonArray = jsnobject.getJSONArray("instruction"); 
+                PreyLogger.i("cmd2_______:" + jsonArray.toString()); 
+                cmd = jsonArray.get(0).toString(); 
+                PreyLogger.i("cmd_______:" + cmd); 
+            } 
+        } catch(Exception e){ 
+            PreyLogger.i("cmd error______:"+e.getMessage()); 
+        } 
+        PreyBetaController.startPrey(context,cmd);
     }
 
 
