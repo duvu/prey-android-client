@@ -37,6 +37,7 @@ import com.prey.actions.fileretrieval.FileretrievalDto;
 import com.prey.actions.location.PreyLocation;
 import com.prey.actions.observer.ActionsController;
 import com.prey.backwardcompatibility.AboveCupcakeSupport;
+import com.prey.dto.Device;
 import com.prey.events.Event;
 import com.prey.exceptions.NoMoreDevicesAllowedException;
 import com.prey.exceptions.PreyException;
@@ -910,4 +911,61 @@ public class PreyWebServices {
         }
     }
 
+    public List<Device> devicesList(Context ctx){
+        List <Device> list=new ArrayList<Device>();
+        try {
+            //String uri="http://localhost:8080/prey/json/devices_list.json";
+            //PreyHttpResponse response = PreyRestHttpClient.getInstance(ctx).get(uri, null);
+            //String responseAsString = response.getResponseAsString();
+            String responseAsString = "[{\"name\":\"Michelsons-MacBook-Pro-PREY\",\"key\":\"fbcd56\",\"type\":\"Laptop\",\"description\":\"Apple MacBook, OS X Yosemite (10.10.3)\",\"missing\":false,\"unreachable\":true,\"location\":null,\"unread_report\":36,\"state\":\"ok\",\"connection_status_desc\":\"No requests yet\",\"status_info\":{},\"client_outdated\":true,\"last_checked_in\":null,\"last_checked_in_from_now\":null,\"os\":\"Mac\",\"os_version\":\"10.10.3\",\"client_version\":null,\"icon\":\"mac-laptop\",\"reports_count\":44,\"delay\":2},{\"name\":\"Google SM-G900M\",\"key\":\"5e6ce6\",\"type\":\"Phone\",\"description\":\"Google SM-G900M\",\"missing\":false,\"unreachable\":true,\"location\":null,\"unread_report\":0,\"state\":\"deleted\",\"connection_status_desc\":\"Unreachable\",\"status_info\":{},\"client_outdated\":true,\"last_checked_in\":null,\"last_checked_in_from_now\":null,\"os\":\"Android\",\"os_version\":\"5.0\",\"client_version\":null,\"icon\":\"android-phone\",\"reports_count\":0,\"delay\":25},{\"name\":\"mbair\",\"key\":\"a0b6c3\",\"type\":\"Laptop\",\"description\":\"Apple MacBook, OS X Yosemite (10.10.5)\",\"missing\":false,\"unreachable\":true,\"location\":null,\"unread_report\":1,\"state\":\"deleted\",\"connection_status_desc\":\"No requests yet\",\"status_info\":{},\"client_outdated\":true,\"last_checked_in\":null,\"last_checked_in_from_now\":null,\"os\":\"Mac\",\"os_version\":\"10.10.5\",\"client_version\":null,\"icon\":\"mac-laptop\",\"reports_count\":1,\"delay\":25},{\"name\":\"cyh\",\"key\":\"1e443e\",\"type\":\"Laptop\",\"description\":\"Apple MacBook, OS X Yosemite (10.10.5)\",\"missing\":false,\"unreachable\":true,\"location\":null,\"unread_report\":20,\"state\":\"deleted\",\"connection_status_desc\":\"No requests yet\",\"status_info\":{},\"client_outdated\":true,\"last_checked_in\":null,\"last_checked_in_from_now\":null,\"os\":\"Mac\",\"os_version\":\"10.10.5\",\"client_version\":null,\"icon\":\"mac-laptop\",\"reports_count\":23,\"delay\":2},{\"name\":\"Google SM-G900M\",\"key\":\"1d3be2\",\"type\":\"Phone\",\"description\":\"Google SM-G900M\",\"missing\":false,\"unreachable\":true,\"location\":null,\"unread_report\":0,\"state\":\"deleted\",\"connection_status_desc\":\"Unreachable\",\"status_info\":{},\"client_outdated\":true,\"last_checked_in\":null,\"last_checked_in_from_now\":null,\"os\":\"Android\",\"os_version\":\"5.0\",\"client_version\":null,\"icon\":\"android-phone\",\"reports_count\":0,\"delay\":25},{\"name\":\"Google SM-G920I\",\"key\":\"cd820e\",\"type\":\"Phone\",\"description\":\"Google SM-G920I\",\"missing\":false,\"unreachable\":false,\"location\":null,\"unread_report\":0,\"state\":\"ok\",\"connection_status_desc\":\"Ready\",\"status_info\":{},\"client_outdated\":true,\"last_checked_in\":null,\"last_checked_in_from_now\":null,\"os\":\"Android\",\"os_version\":\"5.1.1\",\"client_version\":null,\"icon\":\"android-phone\",\"reports_count\":0,\"delay\":25},{\"name\":\"Google XT1058\",\"key\":\"86040e\",\"type\":\"Phone\",\"description\":\"Google XT1058\",\"missing\":false,\"unreachable\":true,\"location\":null,\"unread_report\":0,\"state\":\"deleted\",\"connection_status_desc\":\"Unreachable\",\"status_info\":{},\"client_outdated\":true,\"last_checked_in\":null,\"last_checked_in_from_now\":null,\"os\":\"Android\",\"os_version\":\"5.1\",\"client_version\":null,\"icon\":\"android-phone\",\"reports_count\":0,\"delay\":25},{\"name\":\"nyx\",\"key\":\"3c894f\",\"type\":\"Laptop\",\"description\":\"Apple MacBook, OS X Yosemite (10.10.5)\",\"missing\":false,\"unreachable\":true,\"location\":null,\"unread_report\":0,\"state\":\"deleted\",\"connection_status_desc\":\"No requests yet\",\"status_info\":{},\"client_outdated\":true,\"last_checked_in\":null,\"last_checked_in_from_now\":null,\"os\":\"Mac\",\"os_version\":\"10.10.5\",\"client_version\":null,\"icon\":\"mac-laptop\",\"reports_count\":0,\"delay\":25},{\"name\":\"Google XT1058\",\"key\":\"1d1c40\",\"type\":\"Phone\",\"description\":\"Google XT1058\",\"missing\":false,\"unreachable\":true,\"location\":null,\"unread_report\":0,\"state\":\"deleted\",\"connection_status_desc\":\"Unreachable\",\"status_info\":{},\"client_outdated\":true,\"last_checked_in\":null,\"last_checked_in_from_now\":null,\"os\":\"Android\",\"os_version\":\"5.1\",\"client_version\":null,\"icon\":\"android-phone\",\"reports_count\":0,\"delay\":25},{\"name\":\"Google XT1058\",\"key\":\"ed29c6\",\"type\":\"Phone\",\"description\":\"Google XT1058\",\"missing\":false,\"unreachable\":true,\"location\":null,\"unread_report\":0,\"state\":\"deleted\",\"connection_status_desc\":\"Unreachable\",\"status_info\":{},\"client_outdated\":true,\"last_checked_in\":null,\"last_checked_in_from_now\":null,\"os\":\"Android\",\"os_version\":\"5.1\",\"client_version\":null,\"icon\":\"android-phone\",\"reports_count\":0,\"delay\":25}]";
+            PreyLogger.d("devicesList resp:" + responseAsString);
+            //if (response.getStatusCode() == 200) {
+            if (true) {
+                    if (responseAsString != null ) {
+                        String json="{\"prey\":"+responseAsString+"}";
+                        JSONObject jsonObject = new JSONObject(json);
+                        JSONArray jsonArray = jsonObject.getJSONArray("prey");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            String jsonCommand= jsonArray.get(i).toString();
+                            JSONObject jsnobject =new JSONObject(jsonCommand);
+                            String name = jsnobject.getString("name");
+                            String key = jsnobject.getString("key");
+                            String type = jsnobject.getString("type");
+                            String description = jsnobject.getString("description");
+                            String missing = jsnobject.getString("missing");
+                            String unreachable = jsnobject.getString("unreachable");
+                            String location = jsnobject.getString("location");
+                            String unreadReport = jsnobject.getString("unread_report");
+                            String state = jsnobject.getString("state");
+                            String os = jsnobject.getString("os");
+                            String osVersion = jsnobject.getString("os_version");
+                            String clientVersion = jsnobject.getString("client_version");
+                            String icon = jsnobject.getString("icon");
+                            String reportsCount = jsnobject.getString("reports_count");
+                            String delay = jsnobject.getString("delay");
+                            Device device=new Device();
+                            device.setName(name);
+                            device.setKey(key);
+                            device.setType(type);
+                            device.setDescription(description);
+                            device.setMissing(missing);
+                            device.setUnreachable(unreachable);
+                            device.setLocation(location);
+                            device.setUnreadReport(unreadReport);
+                            device.setState(state);
+                            device.setOs(os);
+                            device.setOsVersion(osVersion);
+                            device.setClientVersion(clientVersion);
+                            device.setIcon(icon);
+                            device.setReportsCount(reportsCount);
+                            device.setDelay(delay);
+                            list.add(device);
+                        }
+                    }
+
+            }
+        } catch (Exception e) {
+        }
+        return list;
+    }
 }
