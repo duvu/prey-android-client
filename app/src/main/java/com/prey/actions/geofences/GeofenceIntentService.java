@@ -24,6 +24,7 @@ import com.prey.actions.location.LocationUtil;
 import com.prey.actions.location.PreyLocation;
 import com.prey.events.Event;
 import com.prey.events.manager.EventThread;
+import com.prey.net.PreyWebServices;
 
 import org.json.JSONObject;
 
@@ -89,7 +90,7 @@ public class GeofenceIntentService extends IntentService {
                 String lastEventGeo=PreyConfig.getPreyConfig(context).getLastEventGeo();
 
                 PreyLogger.d("newEventGeo:"+newEventGeo+" lastEventGeo:"+lastEventGeo);
-                if(!newEventGeo.equals(lastEventGeo)) {
+                if(true){//!newEventGeo.equals(lastEventGeo)) {
                     int i=0;
                     PreyLocation locationNow =null;
                     do {
@@ -117,7 +118,8 @@ public class GeofenceIntentService extends IntentService {
                                 info.put("accuracy", locationNow.getAccuracy());
                                 info.put("method", locationNow.getMethod());
                                 event.setInfo(info.toString());
-                                new EventThread(this, event, jsonObjectStatus).start();
+                                //new EventThread(this, event, jsonObjectStatus).start();
+                                PreyWebServices.getInstance().sendPreyHttpEvent(this, event, jsonObjectStatus);
                                 PreyConfig.getPreyConfig(context).setLastEventGeo(newEventGeo);
                             }
                         } else {
@@ -131,7 +133,8 @@ public class GeofenceIntentService extends IntentService {
                                 info.put("accuracy", locationNow.getAccuracy());
                                 info.put("method", locationNow.getMethod());
                                 event.setInfo(info.toString());
-                                new EventThread(this, event, jsonObjectStatus).start();
+                                //new EventThread(this, event, jsonObjectStatus).start();
+                                PreyWebServices.getInstance().sendPreyHttpEvent(this, event, jsonObjectStatus);
                                 PreyConfig.getPreyConfig(context).setLastEventGeo(newEventGeo);
                             }
                         }
