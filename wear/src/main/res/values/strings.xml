@@ -11,4 +11,32 @@
     <string name="permission_message_activity_request_permission_on_phone">App requires access to your phone\'s storage.</string>
     <string name="open_on_phone_message_activity_request_permission_on_phone">Open on phone</string>
 
+
+    <string name="intro">Waiting for data to arrive\u2026</string>
+    <string name="capability_2_notification">Capability 2</string>
+    <string name="capabilities_1_and_2_notification">Capabilities 1 and 2</string>
+    <string name="no_device">No device provides the requested capabilities</string>
+    <string name="connected_nodes">Nodes: %1$s</string>
+    <string name="google_maps_key">AIzaSyDo_eJffmjgIFjRe8gDM6SfTV8CinYuDjY</string>
+
+
+    <string name="device_name">OSO</string>
+    <string name="device_os">Apple MacBook, OS X 10.12</string>
+    <string name="device_version">Prey: 1.6.3</string>
+    <string name="device_estado">DISPONIBLE</string>
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+    <string name="four">4</string>
+    <string name="five">5</string>
+    <string name="six">6</string>
+    <string name="seven">7</string>
+    <string name="eight">8</string>
+    <string name="nine">9</string>
+    <string name="zero">0</string>
+    <string name="disp">0</string>
+    <string name="dispHint">0</string>
+    <string name="ok">ok</string>
+
+
 </resources>

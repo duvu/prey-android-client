@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2014 The Android Open Source Project
+<!-- Copyright (C) 2015 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,11 +14,8 @@
      limitations under the License.
 -->
 
-<resources>
-    <dimen name="pair_button_diameter">40dp</dimen>
-    <dimen name="circle_border_normal_width">10dp</dimen>
-    <dimen name="circle_padding">5dp</dimen>
-    <dimen name="circle_radius">35dp</dimen>
-    <dimen name="circle_radius_pressed">40dp</dimen>
-    <dimen name="dots_spacing">15dp</dimen>
-</resources>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <corners android:radius="20dp"/>
+    <padding android:left="10dp" android:right="10dp" android:top="5dp" android:bottom="5dp"/>
+    <solid android:color="@color/black"/>
+</shape>

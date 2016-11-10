@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sequenceLayout" android:clickable="true" android:layout_width="match_parent" android:layout_height="match_parent"   android:layout_alignParentTop="true" android:layout_centerInParent="true">
+    <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="200dp">
+
+        <LinearLayout android:id="@+id/row1" android:layout_width="fill_parent" android:layout_height="60dp">
+            <RelativeLayout android:padding="5dp" android:layout_width="50dp" android:layout_height="50dp" android:layout_margin="5dp">
+                <ImageView android:id="@+id/grid11Image" android:layout_width="fill_parent" android:layout_height="fill_parent" android:src="@drawable/pattern_pin" />
+                <TextView android:textSize="20dp" android:textColor="#ffffffff" android:gravity="center" android:id="@+id/grid11Text" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_centerInParent="true" />
+            </RelativeLayout>
+            <RelativeLayout android:padding="5dp" android:layout_width="50dp" android:layout_height="50dp" android:layout_margin="5dp">
+                <ImageView android:id="@+id/grid12Image" android:layout_width="fill_parent" android:layout_height="fill_parent" android:src="@drawable/pattern_pin" />
+                <TextView android:textSize="20dp" android:textColor="#ffffffff" android:gravity="center" android:id="@+id/grid12Text" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_centerInParent="true" />
+            </RelativeLayout>
+            <RelativeLayout android:padding="5dp" android:layout_width="50dp" android:layout_height="50dp" android:layout_margin="5dp">
+                <ImageView android:id="@+id/grid13Image" android:layout_width="fill_parent" android:layout_height="fill_parent" android:src="@drawable/pattern_pin" />
+                <TextView android:textSize="20dp" android:textColor="#ffffffff" android:gravity="center" android:id="@+id/grid13Text" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_centerInParent="true" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/row2" android:layout_width="fill_parent" android:layout_height="60dp">
+            <RelativeLayout android:padding="5dp" android:layout_width="50dp" android:layout_height="50dp" android:layout_margin="5dp">
+                <ImageView android:id="@+id/grid21Image" android:layout_width="fill_parent" android:layout_height="fill_parent" android:src="@drawable/pattern_pin" />
+                <TextView android:textSize="20dp" android:textColor="#ffffffff" android:gravity="center" android:id="@+id/grid21Text" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_centerInParent="true" />
+            </RelativeLayout>
+            <RelativeLayout android:padding="5dp" android:layout_width="50dp" android:layout_height="50dp" android:layout_margin="5dp">
+                <ImageView android:id="@+id/grid22Image" android:layout_width="fill_parent" android:layout_height="fill_parent" android:src="@drawable/pattern_pin" />
+                <TextView android:textSize="20dp" android:textColor="#ffffffff" android:gravity="center" android:id="@+id/grid22Text" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_centerInParent="true" />
+            </RelativeLayout>
+            <RelativeLayout android:padding="5dp" android:layout_width="50dp" android:layout_height="50dp" android:layout_margin="5dp">
+                <ImageView android:id="@+id/grid23Image" android:layout_width="fill_parent" android:layout_height="fill_parent" android:src="@drawable/pattern_pin" />
+                <TextView android:textSize="20dp" android:textColor="#ffffffff" android:gravity="center" android:id="@+id/grid23Text" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_centerInParent="true" />
+            </RelativeLayout>
+        </LinearLayout>
+        <LinearLayout android:id="@+id/row3" android:layout_width="fill_parent" android:layout_height="60dp">
+            <RelativeLayout android:padding="5dp" android:layout_width="50dp" android:layout_height="50dp" android:layout_margin="5dp">
+                <ImageView android:id="@+id/grid31Image" android:layout_width="fill_parent" android:layout_height="fill_parent" android:src="@drawable/pattern_pin" />
+                <TextView android:textSize="20dp" android:textColor="#ffffffff" android:gravity="center" android:id="@+id/grid31Text" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_centerInParent="true" />
+            </RelativeLayout>
+            <RelativeLayout android:padding="5dp" android:layout_width="50dp" android:layout_height="50dp" android:layout_margin="5dp">
+                <ImageView android:id="@+id/grid32Image" android:layout_width="fill_parent" android:layout_height="fill_parent" android:src="@drawable/pattern_pin" />
+                <TextView android:textSize="20dp" android:textColor="#ffffffff" android:gravity="center" android:id="@+id/grid32Text" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_centerInParent="true" />
+            </RelativeLayout>
+            <RelativeLayout android:padding="5dp" android:layout_width="50dp" android:layout_height="50dp" android:layout_margin="5dp">
+                <ImageView android:id="@+id/grid33Image" android:layout_width="fill_parent" android:layout_height="fill_parent" android:src="@drawable/pattern_pin" />
+                <TextView android:textSize="20dp" android:textColor="#ffffffff" android:gravity="center" android:id="@+id/grid33Text" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_centerInParent="true" />
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

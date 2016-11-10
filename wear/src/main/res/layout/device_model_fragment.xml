@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:layout_gravity="center"
+    >
+
+    <TextView
+        android:id="@+id/device_name"
+
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed-light"
+        android:lineSpacingExtra="-4sp"
+        android:textColor="@color/text_color"
+        android:textSize="12sp"
+        android:text="@string/device_name"
+
+        android:layout_alignParentTop="true" />
+
+    <ImageView
+        android:id="@+id/image_device"
+        android:layout_height="80dp"
+
+        android:layout_width="wrap_content"
+        android:src="@drawable/windows_laptop2"
+        android:layout_below="@+id/device_name"
+        />
+    <TextView
+        android:id="@+id/device_os"
+
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed-light"
+        android:lineSpacingExtra="-4sp"
+        android:textColor="@color/text_color"
+        android:textSize="12sp"
+        android:text="@string/device_os"
+        android:layout_below="@+id/image_device"
+        />
+
+    <TextView
+        android:id="@+id/device_version"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:fontFamily="sans-serif-condensed-light"
+        android:lineSpacingExtra="-4sp"
+        android:textColor="@color/text_color"
+        android:textSize="12sp"
+        android:text="@string/device_version"
+        android:gravity="center"
+        android:layout_below="@+id/device_os"
+        />
+
+    <TextView
+        android:id="@+id/device_estado"
+
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:fontFamily="sans-serif-condensed-light"
+        android:lineSpacingExtra="-4sp"
+        android:textColor="@color/text_color"
+        android:textSize="12sp"
+        android:text="@string/device_estado"
+
+
+
+        android:layout_below="@+id/device_version"
+
+        />
+
+
+
+
+</RelativeLayout>
