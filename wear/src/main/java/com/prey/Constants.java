@@ -33,12 +33,19 @@ public class Constants {
     // Requests
     public static final int COMM_TYPE_REQUEST_PROMPT_PERMISSION = 1;
     public static final int COMM_TYPE_REQUEST_DATA = 2;
+    public static final int COMM_TYPE_REQUEST_DATA_LIST = 3;
 
     // Responses
     public static final int COMM_TYPE_RESPONSE_PERMISSION_REQUIRED = 1001;
     public static final int COMM_TYPE_RESPONSE_USER_APPROVED_PERMISSION = 1002;
     public static final int COMM_TYPE_RESPONSE_USER_DENIED_PERMISSION = 1003;
     public static final int COMM_TYPE_RESPONSE_DATA = 1004;
+    public static final int COMM_TYPE_RESPONSE_LIST_DEVICES= 1005;
+    public static final int COMM_TYPE_RESPONSE_ACTION_DEVICE= 1006;
+
+
+    public static final String ACTION_DEVICE= "action_device";
+    public static final String LIST_DEVICE= "list_device";
 
     // Phone
     public static final String CAPABILITY_PHONE_APP = "phone_app_runtime_permissions";

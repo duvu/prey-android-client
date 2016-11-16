@@ -37,6 +37,7 @@ import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -48,19 +49,21 @@ public class IncomingRequestWearService extends WearableListenerService {
 
     private static final String TAG = "PREY";
 
+    public static ArrayList<DataMap> listMap;
+
     public IncomingRequestWearService() {
-        Log.d(TAG, "IncomingRequestWearService()");
+        Log.i(TAG, "IncomingRequestWearService()");
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(TAG, "onCreate()");
+        Log.i(TAG, "onCreate()");
     }
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        Log.d(TAG, "onMessageReceived(): " + messageEvent);
+        Log.i(TAG, "onMessageReceived(): " + messageEvent);
 
         String messagePath = messageEvent.getPath();
 
@@ -74,12 +77,14 @@ public class IncomingRequestWearService extends WearableListenerService {
 
             } else if (requestType == Constants.COMM_TYPE_REQUEST_DATA) {
                 respondWithSensorInformation();
+            } else if (requestType == Constants.COMM_TYPE_REQUEST_DATA_LIST) {
+                 respondListDevice(dataMap.getDataMapArrayList(Constants.LIST_DEVICE));
             }
         }
     }
 
     private void promptUserForSensorPermission() {
-        Log.d(TAG, "promptUserForSensorPermission()");
+        Log.i(TAG, "promptUserForSensorPermission()");
 
         boolean sensorPermissionApproved =
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.BODY_SENSORS)
@@ -100,7 +105,7 @@ public class IncomingRequestWearService extends WearableListenerService {
     }
 
     private void respondWithSensorInformation() {
-        Log.d(TAG, "respondWithSensorInformation()");
+        Log.i(TAG, "respondWithSensorInformation()");
 
         boolean sensorPermissionApproved =
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.BODY_SENSORS)
@@ -128,9 +133,19 @@ public class IncomingRequestWearService extends WearableListenerService {
         }
     }
 
+    private void respondListDevice(ArrayList<DataMap> listMap){
+        Log.i(TAG, "respondListDevice___");
+        IncomingRequestWearService.listMap=listMap;
+
+        Intent startIntent = new Intent(getApplicationContext(), ListDevicesActivity.class);
+        startIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        startActivity(startIntent);
+    }
+
     private void sendMessage(DataMap dataMap) {
 
-        Log.d(TAG, "sendMessage(): " + dataMap);
+        Log.i(TAG, "sendMessage(): " + dataMap);
 
         GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Wearable.API)
@@ -141,7 +156,7 @@ public class IncomingRequestWearService extends WearableListenerService {
                         TimeUnit.MILLISECONDS);
 
         if (!connectionResult.isSuccess()) {
-            Log.d(TAG, "Google API Client failed to connect.");
+            Log.i(TAG, "Google API Client failed to connect.");
             return;
         }
 
@@ -157,7 +172,7 @@ public class IncomingRequestWearService extends WearableListenerService {
                         TimeUnit.MILLISECONDS);
 
         if (!getCapabilityResult.getStatus().isSuccess()) {
-            Log.d(TAG, "CapabilityApi failed to return any results.");
+            Log.i(TAG, "CapabilityApi failed to return any results.");
             googleApiClient.disconnect();
             return;
         }
@@ -176,9 +191,9 @@ public class IncomingRequestWearService extends WearableListenerService {
                 pendingMessageResult.await(Constants.CONNECTION_TIME_OUT_MS, TimeUnit.MILLISECONDS);
 
         if (!sendMessageResult.getStatus().isSuccess()) {
-            Log.d(TAG, "Sending message failed, onResult: " + sendMessageResult.getStatus());
+            Log.i(TAG, "Sending message failed, onResult: " + sendMessageResult.getStatus());
         } else {
-            Log.d(TAG, "Message sent successfully");
+            Log.i(TAG, "Message sent successfully");
         }
 
         googleApiClient.disconnect();
@@ -190,7 +205,7 @@ public class IncomingRequestWearService extends WearableListenerService {
      */
     private String pickBestNodeId(Set<Node> nodes) {
 
-        Log.d(TAG, "pickBestNodeId: " + nodes);
+        Log.i(TAG, "pickBestNodeId: " + nodes);
 
 
         String bestNodeId = null;

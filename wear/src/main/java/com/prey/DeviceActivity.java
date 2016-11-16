@@ -52,6 +52,7 @@ public class DeviceActivity extends Activity {
         deviceModelFragment = new DeviceModelFragment();
         deviceModelFragment.idDevice=idDevice;
         actionsFragment = new ActionFragment();
+        actionsFragment.idDevice=idDevice;
         mapFragment = new MapsFragment();
         List<Fragment> pages = new ArrayList<>();
         pages.add(deviceModelFragment);

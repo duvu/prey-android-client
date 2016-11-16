@@ -1,18 +1,10 @@
-package com.prey.fragments;
+package com.prey;
 
-import android.app.Fragment;
+import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Vibrator;
-import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -23,116 +15,67 @@ import com.google.android.gms.wearable.CapabilityInfo;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.MessageEvent;
-import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.Wearable;
-import com.prey.Constants;
-import com.prey.LoaderActivity;
-import com.prey.R;
+
+
+
+import com.google.android.gms.wearable.Node;
 
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+
+
 /**
- * Created by oso on 22-09-16.
+ * Created by oso on 14-11-16.
  */
 
-public class ActionFragment extends Fragment  implements   GoogleApiClient.ConnectionCallbacks,
+public class LoaderActivity extends Activity implements   GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         CapabilityApi.CapabilityListener,
         MessageApi.MessageListener{
-
-    private ImageView mPhoto;
-
-    public int idDevice;
 
     public static final String TAG = "PREY";
     private GoogleApiClient mGoogleApiClient;
     private String mPhoneNodeId;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.actions_fragment, container, false);
-        // mPhoto = (ImageView) view.findViewById(R.id.photo);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_loader);
 
-        ImageView sound=(ImageView)view.findViewById(R.id.sound);
-
-        sound.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new ActionDeviceRemoteTask().execute("sound");
-            }
-        });
-
-        ImageView alert=(ImageView)view.findViewById(R.id.alert);
-
-        alert.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new ActionDeviceRemoteTask().execute("alert");
-            }
-        });
-
-
-        ImageView lock=(ImageView)view.findViewById(R.id.lock);
-
-        lock.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new ActionDeviceRemoteTask().execute("lock");
-            }
-        });
-
-        ImageView trash=(ImageView)view.findViewById(R.id.trash);
-
-        trash.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new ActionDeviceRemoteTask().execute("trash");
-            }
-        });
-
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this.getActivity())
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Wearable.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
-
-
-        return view;
-    }
-
-    public void setBackgroundImage(Bitmap bitmap) {
-        mPhoto.setImageBitmap(bitmap);
     }
 
 
-    private class ActionDeviceRemoteTask extends AsyncTask<String, Void, Void> {
+    @Override
+    protected void onResume() {
+        Log.i(TAG, "onResume()");
+        super.onResume();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
 
-        ProgressDialog progressDialog = null;
+            new ListDevicesRemoteTask().execute();
 
-        @Override
-        protected void onPreExecute() {
-            Log.i(TAG, "onPreExecute ListDevicesRemoteTask");
         }
+    }
 
-        @Override
-        protected Void doInBackground(String... data) {
-            Log.i(TAG, "doInBackground ListDevicesRemoteTask");
-            DataMap dataMap = new DataMap();
-            dataMap.putInt(Constants.KEY_COMM_TYPE,
-                    Constants.COMM_TYPE_RESPONSE_ACTION_DEVICE);
-            dataMap.putString(Constants.ACTION_DEVICE,data[0]);
-            sendMessage(dataMap);
-            return null;
+
+    @Override
+    protected void onPause() {
+        Log.i(TAG, "onPause()");
+        super.onPause();
+        if ((mGoogleApiClient != null) && mGoogleApiClient.isConnected()) {
+            Wearable.CapabilityApi.removeCapabilityListener(
+                    mGoogleApiClient,
+                    this,
+                    Constants.CAPABILITY_PHONE_APP);
+            Wearable.MessageApi.removeListener(mGoogleApiClient, this);
+            mGoogleApiClient.disconnect();
         }
-
-        @Override
-        protected void onPostExecute(Void unused) {
-            Log.i(TAG, "onPostExecute ListDevicesRemoteTask");
-        }
-
     }
 
     @Override
@@ -171,6 +114,34 @@ public class ActionFragment extends Fragment  implements   GoogleApiClient.Conne
         });
     }
 
+    private String pickBestNodeId(Set<Node> nodes) {
+
+        String bestNodeId = null;
+        // Find a nearby node or pick one arbitrarily.
+        for (Node node : nodes) {
+            if (node.isNearby()) {
+                return node.getId();
+            }
+            bestNodeId = node.getId();
+        }
+        return bestNodeId;
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.i(TAG, "onConnectionSuspended(): connection to location client suspended");
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.e(TAG, "onConnectionFailed(): connection to location client failed");
+    }
+
+    public void onCapabilityChanged(CapabilityInfo capabilityInfo) {
+        Log.i(TAG, "onCapabilityChanged(): " + capabilityInfo);
+
+        mPhoneNodeId = pickBestNodeId(capabilityInfo.getNodes());
+    }
 
     public void onMessageReceived(MessageEvent messageEvent) {
         Log.i(TAG, "onMessageReceived(): " + messageEvent);
@@ -235,32 +206,29 @@ public class ActionFragment extends Fragment  implements   GoogleApiClient.Conne
         }
     }
 
-    private String pickBestNodeId(Set<Node> nodes) {
+    private class ListDevicesRemoteTask extends AsyncTask<String, Void, Void> {
 
-        String bestNodeId = null;
-        // Find a nearby node or pick one arbitrarily.
-        for (Node node : nodes) {
-            if (node.isNearby()) {
-                return node.getId();
-            }
-            bestNodeId = node.getId();
+        ProgressDialog progressDialog = null;
+
+        @Override
+        protected void onPreExecute() {
+            Log.i(TAG, "onPreExecute ListDevicesRemoteTask");
         }
-        return bestNodeId;
-    }
 
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.i(TAG, "onConnectionSuspended(): connection to location client suspended");
-    }
+        @Override
+        protected Void doInBackground(String... data) {
+            Log.i(TAG, "doInBackground ListDevicesRemoteTask");
+            DataMap dataMap = new DataMap();
+            dataMap.putInt(Constants.KEY_COMM_TYPE,
+                    Constants.COMM_TYPE_RESPONSE_LIST_DEVICES);
+            sendMessage(dataMap);
+            return null;
+        }
 
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e(TAG, "onConnectionFailed(): connection to location client failed");
-    }
+        @Override
+        protected void onPostExecute(Void unused) {
+            Log.i(TAG, "onPostExecute ListDevicesRemoteTask");
+        }
 
-    public void onCapabilityChanged(CapabilityInfo capabilityInfo) {
-        Log.i(TAG, "onCapabilityChanged(): " + capabilityInfo);
-
-        mPhoneNodeId = pickBestNodeId(capabilityInfo.getNodes());
     }
 }

@@ -32,14 +32,10 @@
             android:required="false" />
 
         <activity android:name=".PinActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
-
+        <activity android:name=".LoaderActivity"></activity>
         <activity android:name=".LoginActivity"></activity>
         <activity
             android:name=".ListDevicesActivity"
@@ -51,7 +47,11 @@
             android:name=".MainWearActivity"
             android:label="@string/app_name"
             android:launchMode="singleInstance">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity

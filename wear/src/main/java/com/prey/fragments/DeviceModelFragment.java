@@ -12,7 +12,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.wearable.DataMap;
+import com.prey.IncomingRequestWearService;
 import com.prey.R;
+
+import java.util.ArrayList;
 
 /**
  * Created by oso on 22-09-16.
@@ -25,15 +29,7 @@ public class DeviceModelFragment extends Fragment {
     private boolean mInitialized;
     public int idDevice;
 
-    private int deviceIds[]=new int[]{
-            R.drawable.android_generic2,
-            R.drawable.android_phone2,
-            R.drawable.android_tablet2,
-            R.drawable.windows_laptop2};
-    private String deviceNames[]=new String[]{
-            "Motorola XT1563",
-            "Samsung SM-G900M",
-            "Asus Nexus 7","Oso MacBook"};
+
 
 
     @Nullable
@@ -44,10 +40,34 @@ public class DeviceModelFragment extends Fragment {
 
         ImageView imageDevice=(ImageView) view.findViewById(R.id.image_device);
 
-        imageDevice.setImageResource(deviceIds[idDevice]);
+
+        ArrayList<DataMap> listMap= IncomingRequestWearService.listMap;
+        String icon=listMap.get(idDevice).get("icon");
+        String name=listMap.get(idDevice).get("name");
+        String description=listMap.get(idDevice).get("description");
+        String client_version=listMap.get(idDevice).get("client_version");
+        String state=listMap.get(idDevice).get("state");
+        if (icon.equals("mac-laptop")){
+            imageDevice.setImageResource(R.drawable.windows_laptop2);
+        }else{
+            if(icon.equals("android-phone")){
+                imageDevice.setImageResource(R.drawable.android_generic2);
+            }else{
+                imageDevice.setImageResource(R.drawable.windows_laptop2);
+            }
+        }
+
 
         TextView textDeviceName=(TextView)view.findViewById(R.id.device_name);
-        textDeviceName.setText(deviceNames[idDevice]);
+        textDeviceName.setText(name);
+
+        TextView textDeviceOs=(TextView)view.findViewById(R.id.device_os);
+        textDeviceOs.setText(description);
+
+        TextView textDeviceVersion=(TextView)view.findViewById(R.id.device_version);
+        textDeviceVersion.setText(client_version);
+        TextView textDeviceState=(TextView)view.findViewById(R.id.device_estado);
+        textDeviceState.setText(client_version);
 
         /*
         View view = inflater.inflate(R.layout.data_fragment, container, false);

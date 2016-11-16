@@ -44,8 +44,12 @@ import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.Wearable;
 import com.prey.Constants;
 import com.prey.R;
+import com.prey.dto.Device;
+import com.prey.net.PreyWebServices;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -93,7 +97,7 @@ public class MainPhoneActivity extends AppCompatActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate()");
+        Log.i(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
 
         /*
@@ -146,7 +150,7 @@ public class MainPhoneActivity extends AppCompatActivity implements
 
     @Override
     protected void onPause() {
-        Log.d(TAG, "onPause()");
+        Log.i(TAG, "onPause()");
         super.onPause();
         if ((mGoogleApiClient != null) && (mGoogleApiClient.isConnected())) {
             Wearable.CapabilityApi.removeCapabilityListener(
@@ -160,7 +164,7 @@ public class MainPhoneActivity extends AppCompatActivity implements
 
     @Override
     protected void onResume() {
-        Log.d(TAG, "onResume()");
+        Log.i(TAG, "onResume()");
         super.onResume();
 
         /* Enables app to handle 23+ (M+) style permissions. It also covers user changing
@@ -182,7 +186,7 @@ public class MainPhoneActivity extends AppCompatActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "onActivityResult()");
+        Log.i(TAG, "onActivityResult()");
         if (requestCode == REQUEST_WEAR_PERMISSION_RATIONALE) {
 
             if (resultCode == Activity.RESULT_OK) {
@@ -198,7 +202,7 @@ public class MainPhoneActivity extends AppCompatActivity implements
 
     @Override
     public void onConnected(Bundle bundle) {
-        Log.d(TAG, "onConnected()");
+        Log.i(TAG, "onConnected()");
 
         // Set up listeners for capability and message changes.
         Wearable.CapabilityApi.addCapabilityListener(
@@ -206,7 +210,7 @@ public class MainPhoneActivity extends AppCompatActivity implements
                 this,
                 Constants.CAPABILITY_WEAR_APP);
         Wearable.MessageApi.addListener(mGoogleApiClient, this);
-
+        Log.i(TAG, "addListener()");
         // Initial check of capabilities to find the wear nodes.
         PendingResult<CapabilityApi.GetCapabilityResult> pendingResult =
                 Wearable.CapabilityApi.getCapability(
@@ -220,13 +224,13 @@ public class MainPhoneActivity extends AppCompatActivity implements
 
                 CapabilityInfo capabilityInfo = getCapabilityResult.getCapability();
                 String capabilityName = capabilityInfo.getName();
-
+                Log.i(TAG, "capabilityName()"+capabilityName);
                 boolean wearSupportsSampleApp =
                         capabilityName.equals(Constants.CAPABILITY_WEAR_APP);
 
                 if (wearSupportsSampleApp) {
                     mWearNodeIds = capabilityInfo.getNodes();
-
+                    Log.i(TAG, "mWearNodeIds()"+mWearNodeIds);
                     /*
                      * Upon getting all wear nodes, we now need to check if the original request to
                      * launch this activity (and PhonePermissionRequestActivity) was initiated by
@@ -247,7 +251,7 @@ public class MainPhoneActivity extends AppCompatActivity implements
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.d(TAG, "onConnectionSuspended(): connection to location client suspended");
+        Log.i(TAG, "onConnectionSuspended(): connection to location client suspended");
     }
 
     @Override
@@ -257,13 +261,13 @@ public class MainPhoneActivity extends AppCompatActivity implements
 
 
     public void onCapabilityChanged(CapabilityInfo capabilityInfo) {
-        Log.d(TAG, "onCapabilityChanged(): " + capabilityInfo);
+        Log.i(TAG, "onCapabilityChanged(): " + capabilityInfo);
 
         mWearNodeIds = capabilityInfo.getNodes();
     }
 
     public void onMessageReceived(MessageEvent messageEvent) {
-        Log.d(TAG, "onMessageReceived(): " + messageEvent);
+        Log.i(TAG, "onMessageReceived(): " + messageEvent);
 
         String messagePath = messageEvent.getPath();
 
@@ -303,9 +307,18 @@ public class MainPhoneActivity extends AppCompatActivity implements
                 String storageDetails = dataMap.getString(Constants.KEY_PAYLOAD);
                 updateWearButtonOnUiThread();
                 logToUi(storageDetails);
+            } else if (commType == Constants.COMM_TYPE_RESPONSE_LIST_DEVICES) {
+                DataMap outgoingDataRequestDataMap = new DataMap();
+                outgoingDataRequestDataMap.putInt(Constants.KEY_COMM_TYPE,
+                        Constants.COMM_TYPE_REQUEST_DATA_LIST);
+
+
+                ArrayList<DataMap> listMap=PreyWebServices.getInstance().devicesListMap(this);
+                outgoingDataRequestDataMap.putDataMapArrayList(Constants.LIST_DEVICE,listMap);
+                sendMessage(outgoingDataRequestDataMap);
 
             } else {
-                Log.d(TAG, "Unrecognized communication type received.");
+                Log.i(TAG, "Unrecognized communication type received.");
             }
         }
     }
@@ -313,17 +326,17 @@ public class MainPhoneActivity extends AppCompatActivity implements
     @Override
     public void onResult(MessageApi.SendMessageResult sendMessageResult) {
         if (!sendMessageResult.getStatus().isSuccess()) {
-            Log.d(TAG, "Sending message failed, onResult: " + sendMessageResult);
+            Log.i(TAG, "Sending message failed, onResult: " + sendMessageResult);
             updateWearButtonOnUiThread();
             logToUi("Sending message failed.");
 
         } else {
-            Log.d(TAG, "Message sent.");
+            Log.i(TAG, "Message sent.");
         }
     }
 
     private void sendMessage(DataMap dataMap) {
-        Log.d(TAG, "sendMessage(): " + mWearNodeIds);
+        Log.i(TAG, "sendMessage(): " + mWearNodeIds);
 
         if ((mWearNodeIds != null) && (!mWearNodeIds.isEmpty())) {
 
@@ -374,7 +387,7 @@ public class MainPhoneActivity extends AppCompatActivity implements
         if (mainUiThread) {
 
             if (!message.isEmpty()) {
-                Log.d(TAG, message);
+                Log.i(TAG, message);
                 mOutputTextView.setText(message);
             }
 
@@ -385,7 +398,7 @@ public class MainPhoneActivity extends AppCompatActivity implements
                     @Override
                     public void run() {
 
-                        Log.d(TAG, message);
+                        Log.i(TAG, message);
                         mOutputTextView.setText(message);
                     }
                 });
@@ -425,7 +438,7 @@ public class MainPhoneActivity extends AppCompatActivity implements
 
     private void sendWearPermissionResults() {
 
-        Log.d(TAG, "sendWearPermissionResults()");
+        Log.i(TAG, "sendWearPermissionResults()");
 
         DataMap dataMap = new DataMap();
 

@@ -159,7 +159,7 @@ public class PinActivity extends Activity {
                             Log.i("PREY","clave:"+clave);
                         }
                         if ("ADGH".equals(clave)){
-                            Intent startIntent = new Intent(getApplicationContext(), ListDevicesActivity.class);
+                            Intent startIntent = new Intent(getApplicationContext(), LoaderActivity.class);
                             startActivity(startIntent);
                         }
 

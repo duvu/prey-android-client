@@ -34,6 +34,7 @@ import android.widget.TextView;
 
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -132,6 +133,14 @@ public class MainWearActivity extends WearableActivity implements
             }
         });
 
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if(resultCode!=ConnectionResult.SUCCESS){
+            Log.i(TAG,"Google play services are not available on this device: "+GooglePlayServicesUtil.getErrorString(resultCode));
+        }
+
+
+
+
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Wearable.API)
                 .addConnectionCallbacks(this)
@@ -195,6 +204,15 @@ public class MainWearActivity extends WearableActivity implements
         mWearBodySensorsPermissionApproved =
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.BODY_SENSORS)
                         == PackageManager.PERMISSION_GRANTED;
+    }
+
+    @Override
+    protected void onStart() {
+        Log.i(TAG,"onStart");
+        super.onStart();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
     }
 
      /*

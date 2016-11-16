@@ -359,7 +359,7 @@ public class CheckPasswordActivity extends AppCompatActivity implements Activity
 
         @Override
         protected Void doInBackground(String... password) {
-            try {
+                try {
                 String apikey = PreyConfig.getPreyConfig(CheckPasswordActivity.this).getApiKey();
                 PreyLogger.d("apikey:"+apikey+" password[0]:"+password[0]);
                 isPasswordOk = PreyWebServices.getInstance().checkPassword(CheckPasswordActivity.this, apikey, password[0]);

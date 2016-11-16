@@ -19,8 +19,11 @@ import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 import com.prey.Constants;
+import com.prey.PreyLogger;
+import com.prey.net.PreyWebServices;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -33,13 +36,13 @@ public class IncomingRequestPhoneService extends WearableListenerService {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(TAG, "onCreate()");
+        Log.i(TAG, "onCreate()");
     }
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         super.onMessageReceived(messageEvent);
-        Log.d(TAG, "onMessageReceived(): " + messageEvent);
+        Log.i(TAG, "IncomingRequestPhoneService onMessageReceived(): " + messageEvent);
 
         String messagePath = messageEvent.getPath();
 
@@ -53,6 +56,22 @@ public class IncomingRequestPhoneService extends WearableListenerService {
 
             } else if (requestType == Constants.COMM_TYPE_REQUEST_DATA) {
                 respondWithStorageInformation(messageEvent.getSourceNodeId());
+            } else if (requestType == Constants.COMM_TYPE_RESPONSE_LIST_DEVICES) {
+                DataMap outgoingDataRequestDataMap = new DataMap();
+                outgoingDataRequestDataMap.putInt(Constants.KEY_COMM_TYPE,
+                        Constants.COMM_TYPE_REQUEST_DATA_LIST);
+
+
+                ArrayList<DataMap> listMap= PreyWebServices.getInstance().devicesListMap(this);
+                outgoingDataRequestDataMap.putDataMapArrayList(Constants.LIST_DEVICE,listMap);
+                sendMessage(messageEvent.getSourceNodeId(),outgoingDataRequestDataMap);
+
+            } else if (requestType == Constants.COMM_TYPE_RESPONSE_ACTION_DEVICE) {
+                DataMap outgoingDataRequestDataMap = new DataMap();
+
+                String action=dataMap.getString(Constants.ACTION_DEVICE);
+                PreyLogger.i("action:"+action);
+
             }
         }
     }
