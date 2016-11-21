@@ -133,11 +133,11 @@ public class JSONParser {
             for (int i = 0; i < jsonArray.length(); i++) {
                 String jsonCommand= jsonArray.get(i).toString();
                 JSONObject explrObject =new JSONObject(jsonCommand);
-                PreyLogger.i(explrObject.toString());
+                PreyLogger.i("[i]:"+explrObject.toString());
                 listaJson.add(explrObject);
             }
         }catch(Exception e){
-            //PreyLogger.e("error in parser:"+e.getMessage(), e);
+            PreyLogger.e("error in parser:"+e.getMessage(), e);
         }
         return listaJson;
     }

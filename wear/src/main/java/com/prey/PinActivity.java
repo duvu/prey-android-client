@@ -160,7 +160,9 @@ public class PinActivity extends Activity {
                         }
                         if ("ADGH".equals(clave)){
                             Intent startIntent = new Intent(getApplicationContext(), LoaderActivity.class);
+                            startIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(startIntent);
+                            finish();
                         }
 
                         PinActivity.this.gridPointsImage[gri_i][gri_j].setImageResource(R.drawable.pattern_pin_selected);

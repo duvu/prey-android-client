@@ -70,7 +70,9 @@ public class IncomingRequestPhoneService extends WearableListenerService {
                 DataMap outgoingDataRequestDataMap = new DataMap();
 
                 String action=dataMap.getString(Constants.ACTION_DEVICE);
-                PreyLogger.i("action:"+action);
+                String deviceId=dataMap.getString(Constants.DEVICE_ID);
+                PreyLogger.i("deviceId:"+deviceId+" action:"+action);
+                PreyWebServices.getInstance().sendAction(this,deviceId,action);
 
             }
         }

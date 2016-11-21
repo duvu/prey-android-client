@@ -41,7 +41,7 @@ public class PreyBetaActionsRunner implements Runnable {
     }
 
     public void execute() {
-
+        PreyLogger.d("cmd:"+cmd);
         if (PreyConfig.getPreyConfig(ctx).isThisDeviceAlreadyRegisteredWithPrey(true)) {
             PreyTelephonyManager preyTelephony = PreyTelephonyManager.getInstance(ctx);
             PreyConnectivityManager preyConnectivity = PreyConnectivityManager.getInstance(ctx);
@@ -53,6 +53,7 @@ public class PreyBetaActionsRunner implements Runnable {
 
                 if (connection) {
                     try {
+
                         if (cmd == null || "".equals(cmd)) {
                             jsonObject = PreyBetaActionsRunner.getInstructions(ctx);
                         } else {

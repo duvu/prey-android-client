@@ -37,6 +37,7 @@ public class Alert extends JsonAction {
     }
 
     public void start(Context ctx, List<ActionResult> list, JSONObject parameters) {
+        PreyLogger.d("alert start:");
         String alert = "";
         try {
             alert = parameters.getString("alert_message");
@@ -46,6 +47,7 @@ public class Alert extends JsonAction {
             } catch (Exception e2) {
             }
         }
+        PreyLogger.d("alert:"+alert);
         String messageId = null;
         try {
             messageId = parameters.getString(PreyConfig.MESSAGE_ID);

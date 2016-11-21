@@ -30,6 +30,7 @@ public class Lock extends JsonAction {
     }
 
     public void start(Context ctx, List<ActionResult> list, JSONObject parameters) {
+        PreyLogger.d("lock start:");
         String messageId = null;
         try {
             messageId = parameters.getString(PreyConfig.MESSAGE_ID);
@@ -47,6 +48,7 @@ public class Lock extends JsonAction {
     }
 
     public void stop(Context ctx, List<ActionResult> list, JSONObject parameters) {
+        PreyLogger.d("lock stop:");
         String messageId = null;
         try {
             messageId = parameters.getString(PreyConfig.MESSAGE_ID);

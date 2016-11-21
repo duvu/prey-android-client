@@ -50,7 +50,13 @@ public class C2DMReceiver extends BroadcastReceiver {
             PreyLogger.d("___[" + key + "]" + intent.getExtras().getString(key));
         }
 
-        PreyBetaController.startPrey(context);
+        String cmd=intent.getExtras().getString("cmd");
+        if(!"".equals(cmd)){
+            PreyBetaController.startPrey(context,cmd);
+        }else{
+            PreyBetaController.startPrey(context);
+        }
+
     }
 
 

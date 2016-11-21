@@ -30,10 +30,11 @@ email-batch=
 #gcm
 gcm-id-prefix=GCM__
 #prod
-gcm-id=578864628893
+#gcm-id=578864628893
 
 #oso
 #gcm-id=272815493416
+gcm-id=407976907204
 
 
 c2dm-action=message

@@ -46,7 +46,7 @@ public class Constants {
 
 
     public static final String ACTION_DEVICE= "action_device";
-
+    public static final String DEVICE_ID= "device_id";
     public static final String LIST_DEVICE= "list_device";
 
     // Phone

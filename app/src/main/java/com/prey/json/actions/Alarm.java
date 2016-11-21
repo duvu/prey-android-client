@@ -27,6 +27,7 @@ public class Alarm extends JsonAction {
     }
 
     public void start(Context ctx, List<ActionResult> list, JSONObject parameters) {
+        PreyLogger.d("alarm start:");
         String sound = null;
         try {
             sound = parameters.getString("sound");

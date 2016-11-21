@@ -138,9 +138,9 @@ public class IncomingRequestWearService extends WearableListenerService {
         IncomingRequestWearService.listMap=listMap;
 
         Intent startIntent = new Intent(getApplicationContext(), ListDevicesActivity.class);
-        startIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
+        startIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(startIntent);
+
     }
 
     private void sendMessage(DataMap dataMap) {

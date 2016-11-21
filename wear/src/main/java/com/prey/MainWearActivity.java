@@ -17,6 +17,7 @@
 package com.prey;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
@@ -133,14 +134,6 @@ public class MainWearActivity extends WearableActivity implements
             }
         });
 
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if(resultCode!=ConnectionResult.SUCCESS){
-            Log.i(TAG,"Google play services are not available on this device: "+GooglePlayServicesUtil.getErrorString(resultCode));
-        }
-
-
-
-
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Wearable.API)
                 .addConnectionCallbacks(this)
@@ -206,20 +199,11 @@ public class MainWearActivity extends WearableActivity implements
                         == PackageManager.PERMISSION_GRANTED;
     }
 
-    @Override
-    protected void onStart() {
-        Log.i(TAG,"onStart");
-        super.onStart();
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.connect();
-        }
-    }
-
-     /*
-      * Because this wear activity is marked "android:launchMode='singleInstance'" in the manifest,
-      * we need to allow the permissions dialog to be opened up from the phone even if the wear app
-      * is in the foreground. By overriding onNewIntent, we can cover that use case.
-      */
+    /*
+     * Because this wear activity is marked "android:launchMode='singleInstance'" in the manifest,
+     * we need to allow the permissions dialog to be opened up from the phone even if the wear app
+     * is in the foreground. By overriding onNewIntent, we can cover that use case.
+     */
     @Override
     protected void onNewIntent (Intent intent) {
         Log.d(TAG, "onNewIntent()");
@@ -320,7 +304,9 @@ public class MainWearActivity extends WearableActivity implements
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e(TAG, "onConnectionFailed(): connection to location client failed");
+        Log.e(TAG, "onConnectionFailed(): connection to location client failed:"+GooglePlayServicesUtil.getErrorString(connectionResult.getErrorCode()));
+        Dialog d = GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), this, 0);
+        d.show();
     }
 
     public void onCapabilityChanged(CapabilityInfo capabilityInfo) {
