@@ -90,7 +90,6 @@
             android:value="barcode" />
 
         <meta-data android:name="com.google.android.gms.wallet.api.enabled" android:value="true" />
-
         <activity
             android:name="com.prey.activities.bt.MainActivity">
             <intent-filter>
@@ -98,18 +97,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.prey.activities.bt.SettingsActivity" android:label="@string/options" />
-        <activity android:name="com.prey.activities.bt.CustomActivity" android:label="@string/buy" />
-        <activity android:name="com.prey.activities.bt.CreateTransactionActivity" />
-        <activity android:name="com.prey.activities.bt.PayPalActivity" android:label="@string/paypal" />
+
+        <activity android:name="com.braintreepayments.api.AndroidPayActivity"
+            android:theme="@style/bt_transparent_activity"/>
+
+        <activity android:name="com.prey.activities.bt.PayPalActivity"  />
 
         <activity android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-                <data android:scheme="${applicationId}.braintree" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="com.prey.braintree" />
             </intent-filter>
         </activity>
 

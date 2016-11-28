@@ -1,37 +1,62 @@
 package com.prey.activities.bt;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.braintreepayments.api.exceptions.InvalidArgumentException;
-import com.braintreepayments.api.models.PostalAddress;
 
-import com.braintreepayments.api.exceptions.InvalidArgumentException;
-import com.braintreepayments.api.interfaces.BraintreeCancelListener;
-import com.braintreepayments.api.interfaces.BraintreeErrorListener;
-import com.braintreepayments.api.interfaces.PaymentMethodNonceCreatedListener;
+import com.braintreepayments.api.AndroidPay;
+import com.braintreepayments.api.interfaces.BraintreeResponseListener;
+import com.braintreepayments.api.interfaces.TokenizationParametersListener;
+import com.google.android.gms.wallet.Cart;
+import com.google.android.gms.wallet.FullWallet;
+import com.google.android.gms.wallet.LineItem;
+import com.google.android.gms.wallet.MaskedWalletRequest;
+import com.google.android.gms.wallet.PaymentMethodTokenizationParameters;
+import com.google.android.gms.wallet.WalletConstants;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.TextHttpResponseHandler;
+import com.prey.PreyLogger;
+import com.prey.R;
+import com.prey.activities.LoginActivity;
+import com.prey.activities.WelcomeBatchActivity;
+
+import cz.msebera.android.httpclient.Header;
 
 import com.braintreepayments.api.BraintreeFragment;
 import com.braintreepayments.api.PayPal;
 import com.braintreepayments.api.ThreeDSecure;
-import com.prey.R;
+import com.braintreepayments.api.dropin.DropInActivity;
+import com.braintreepayments.api.dropin.DropInRequest;
+import com.braintreepayments.api.dropin.DropInResult;
+import com.braintreepayments.api.dropin.utils.PaymentMethodType;
+import com.braintreepayments.api.exceptions.InvalidArgumentException;
+import com.braintreepayments.api.interfaces.BraintreeCancelListener;
+import com.braintreepayments.api.interfaces.BraintreeErrorListener;
+import com.braintreepayments.api.interfaces.PaymentMethodNonceCreatedListener;
+import com.braintreepayments.api.models.AndroidPayCardNonce;
+import com.braintreepayments.api.models.CardNonce;
+import com.braintreepayments.api.models.PayPalAccountNonce;
+import com.braintreepayments.api.models.PaymentMethodNonce;
+import com.braintreepayments.api.models.PostalAddress;
+import com.braintreepayments.api.models.VenmoAccountNonce;
 
+import java.util.Collection;
 import java.util.Collections;
 
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
 
 /**
- * Created by oso on 23-11-16.
+ * Created by oso on 24-11-16.
  */
 
-public class MainActivity extends BaseActivity implements PaymentMethodNonceCreatedListener,
+public class MainActivity  extends Activity implements PaymentMethodNonceCreatedListener,
         BraintreeCancelListener, BraintreeErrorListener {
+    private String mAuthorization = "eyJ2ZXJzaW9uIjoyLCJhdXRob3JpemF0aW9uRmluZ2VycHJpbnQiOiJjYzA3YmQ0ZTg5YmUzZGIwMWNhY2U5Mjk1YzczYjU4NTMzYTI5MGJlMzQ5ZjIzMmU0MjhhZDgyMzgxMmUzZjMxfGNyZWF0ZWRfYXQ9MjAxNi0xMS0yN1QxOToxNDoxOS44NDQ0Nzk2MjYrMDAwMFx1MDAyNm1lcmNoYW50X2lkPTM0OHBrOWNnZjNiZ3l3MmJcdTAwMjZwdWJsaWNfa2V5PTJuMjQ3ZHY4OWJxOXZtcHIiLCJjb25maWdVcmwiOiJodHRwczovL2FwaS5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tOjQ0My9tZXJjaGFudHMvMzQ4cGs5Y2dmM2JneXcyYi9jbGllbnRfYXBpL3YxL2NvbmZpZ3VyYXRpb24iLCJjaGFsbGVuZ2VzIjpbXSwiZW52aXJvbm1lbnQiOiJzYW5kYm94IiwiY2xpZW50QXBpVXJsIjoiaHR0cHM6Ly9hcGkuc2FuZGJveC5icmFpbnRyZWVnYXRld2F5LmNvbTo0NDMvbWVyY2hhbnRzLzM0OHBrOWNnZjNiZ3l3MmIvY2xpZW50X2FwaSIsImFzc2V0c1VybCI6Imh0dHBzOi8vYXNzZXRzLmJyYWludHJlZWdhdGV3YXkuY29tIiwiYXV0aFVybCI6Imh0dHBzOi8vYXV0aC52ZW5tby5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tIiwiYW5hbHl0aWNzIjp7InVybCI6Imh0dHBzOi8vY2xpZW50LWFuYWx5dGljcy5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tLzM0OHBrOWNnZjNiZ3l3MmIifSwidGhyZWVEU2VjdXJlRW5hYmxlZCI6dHJ1ZSwicGF5cGFsRW5hYmxlZCI6dHJ1ZSwicGF5cGFsIjp7ImRpc3BsYXlOYW1lIjoiQWNtZSBXaWRnZXRzLCBMdGQuIChTYW5kYm94KSIsImNsaWVudElkIjpudWxsLCJwcml2YWN5VXJsIjoiaHR0cDovL2V4YW1wbGUuY29tL3BwIiwidXNlckFncmVlbWVudFVybCI6Imh0dHA6Ly9leGFtcGxlLmNvbS90b3MiLCJiYXNlVXJsIjoiaHR0cHM6Ly9hc3NldHMuYnJhaW50cmVlZ2F0ZXdheS5jb20iLCJhc3NldHNVcmwiOiJodHRwczovL2NoZWNrb3V0LnBheXBhbC5jb20iLCJkaXJlY3RCYXNlVXJsIjpudWxsLCJhbGxvd0h0dHAiOnRydWUsImVudmlyb25tZW50Tm9OZXR3b3JrIjp0cnVlLCJlbnZpcm9ubWVudCI6Im9mZmxpbmUiLCJ1bnZldHRlZE1lcmNoYW50IjpmYWxzZSwiYnJhaW50cmVlQ2xpZW50SWQiOiJtYXN0ZXJjbGllbnQzIiwiYmlsbGluZ0FncmVlbWVudHNFbmFibGVkIjp0cnVlLCJtZXJjaGFudEFjY291bnRJZCI6ImFjbWV3aWRnZXRzbHRkc2FuZGJveCIsImN1cnJlbmN5SXNvQ29kZSI6IlVTRCJ9LCJjb2luYmFzZUVuYWJsZWQiOmZhbHNlLCJtZXJjaGFudElkIjoiMzQ4cGs5Y2dmM2JneXcyYiIsInZlbm1vIjoib2ZmIn0=";
+    private BraintreeFragment mBraintreeFragment;
+
 
     static final String EXTRA_PAYMENT_METHOD_NONCE = "payment_method_nonce";
     static final String EXTRA_DEVICE_DATA = "device_data";
@@ -44,51 +69,64 @@ public class MainActivity extends BaseActivity implements PaymentMethodNonceCrea
 
     private static final String KEY_NONCE = "nonce";
 
-    private BraintreeFragment mBraintreeFragment;
-    private PaymentMethodNonce mNonce;
-
-    private ImageView mNonceIcon;
-    private TextView mNonceString;
-    private TextView mNonceDetails;
-    private TextView mDeviceData;
 
     private Button mDropInButton;
     private Button mPayPalButton;
     private Button mCustomButton;
-    private Button mCreateTransactionButton;
-    private ProgressDialog mLoading;
+
+
+    private Cart cart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-        mNonceIcon = (ImageView) findViewById(R.id.nonce_icon);
-        mNonceString = (TextView) findViewById(R.id.nonce);
-        mNonceDetails = (TextView) findViewById(R.id.nonce_details);
-        mDeviceData = (TextView) findViewById(R.id.device_data);
 
-        mDropInButton = (Button) findViewById(R.id.drop_in);
         mPayPalButton = (Button) findViewById(R.id.paypal);
+        mDropInButton = (Button) findViewById(R.id.drop_in);
         mCustomButton = (Button) findViewById(R.id.custom);
-        mCreateTransactionButton = (Button) findViewById(R.id.create_transaction);
+/*
+        try {
 
-        if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(KEY_NONCE)) {
-                mNonce = savedInstanceState.getParcelable(KEY_NONCE);
-            }
+
+
+            mBraintreeFragment = BraintreeFragment.newInstance(this, mAuthorization);
+            // mBraintreeFragment is ready to use!
+            mBraintreeFragment.addListener(new BraintreeErrorListener() {
+                @Override
+                public void onError(Exception e) {
+                    PreyLogger.i("onError:"+e.getMessage());
+                }
+            });
+            CardBuilder cardBuilder = new CardBuilder()
+                    .cardNumber("411111111111")
+                    .expirationDate("08/20")
+                    .validate(true);
+
+            Card.tokenize(mBraintreeFragment, cardBuilder);
+
+
+
+
+
+            AndroidPay.isReadyToPay(mBraintreeFragment, new BraintreeResponseListener<Boolean>() {
+                @Override
+                public void onResponse(Boolean isReadyToPay) {
+                    PreyLogger.i("onResponse:"+isReadyToPay);
+                }
+            });
+
+        } catch (InvalidArgumentException e) {
+            // There was an issue with your authorization string.
+            PreyLogger.i("error:"+e.getMessage());
         }
+*/
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (mNonce != null) {
-            outState.putParcelable(KEY_NONCE, mNonce);
-        }
-    }
 
     public void launchDropIn(View v) {
+
         startActivityForResult(getDropInRequest().getIntent(this), DROP_IN_REQUEST);
     }
 
@@ -98,12 +136,66 @@ public class MainActivity extends BaseActivity implements PaymentMethodNonceCrea
         startActivityForResult(intent, PAYPAL_REQUEST);
     }
 
+    int REQUEST_CODE=2001;
+    String TOKENIZATION_KEY="";
+
     public void launchCustom(View v) {
-        Intent intent = new Intent(this, CustomActivity.class)
-                .putExtra(EXTRA_COLLECT_DEVICE_DATA, Settings.shouldCollectDeviceData(this))
-                .putExtra(EXTRA_ANDROID_PAY_CART, getAndroidPayCart());
-        startActivityForResult(intent, CUSTOM_REQUEST);
+
+
+        AndroidPay.isReadyToPay(mBraintreeFragment, new BraintreeResponseListener<Boolean>() {
+            @Override
+            public void onResponse(Boolean isReadyToPay) {
+                PreyLogger.i("isReadyToPay:"+isReadyToPay);
+                if (isReadyToPay) {
+                    // show Android Pay
+                }
+            }
+        });
+
+
+        AndroidPay.getTokenizationParameters(mBraintreeFragment, new TokenizationParametersListener() {
+            @Override
+            public void onResult(PaymentMethodTokenizationParameters parameters, Collection<Integer> allowedCardNetworks) {
+                MaskedWalletRequest maskedWalletRequest = MaskedWalletRequest.newBuilder()
+                 //       .setPaymentMethodTokenizationParameter(parameters)
+                        .addAllowedCardNetworks(allowedCardNetworks)
+                        .build();
+            }
+        });
+
+
+        Cart cart = Cart.newBuilder()
+                .setCurrencyCode("USD")
+                .setTotalPrice("150.00")
+                .addLineItem(LineItem.newBuilder()
+                        .setCurrencyCode("USD")
+                        .setDescription("Description")
+                        .setQuantity("1")
+                        .setUnitPrice("150.00")
+                        .setTotalPrice("150.00")
+                        .build())
+                .build();
+        DropInRequest dropInRequest = new DropInRequest()
+                .tokenizationKey(TOKENIZATION_KEY)
+                .androidPayCart(cart);
+
+        // REQUEST_CODE is arbitrary and is only used within this activity
+        startActivityForResult(dropInRequest.getIntent(this), REQUEST_CODE);
+
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        PreyLogger.i("onActivityResult requestCode:"+requestCode+" resultCode:"+resultCode);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            DropInResult result = data.getParcelableExtra(DropInResult.EXTRA_DROP_IN_RESULT);
+            // send result.getPaymentMethodNonce().getNonce() to your server
+        } else {
+            // handle errors here, an error may be available in
+            //Exception error = (Exception) data.getSerializableExtra(DropInActivity.EXTRA_ERROR);
+        }
+    }
+
 
     private DropInRequest getDropInRequest() {
         DropInRequest dropInRequest = new DropInRequest()
@@ -119,155 +211,6 @@ public class MainActivity extends BaseActivity implements PaymentMethodNonceCrea
         }
 
         return dropInRequest;
-    }
-
-    public void createTransaction(View v) {
-        Intent intent = new Intent(this, CreateTransactionActivity.class)
-                .putExtra(CreateTransactionActivity.EXTRA_PAYMENT_METHOD_NONCE, mNonce);
-        startActivity(intent);
-
-        mCreateTransactionButton.setEnabled(false);
-        clearNonce();
-    }
-
-    @Override
-    public void onPaymentMethodNonceCreated(PaymentMethodNonce paymentMethodNonce) {
-        super.onPaymentMethodNonceCreated(paymentMethodNonce);
-
-        displayResult(paymentMethodNonce, null);
-        safelyCloseLoadingView();
-    }
-
-    @Override
-    public void onCancel(int requestCode) {
-        super.onCancel(requestCode);
-
-        safelyCloseLoadingView();
-    }
-
-    @Override
-    public void onError(Exception error) {
-        super.onError(error);
-
-        safelyCloseLoadingView();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        safelyCloseLoadingView();
-
-        if (resultCode == RESULT_OK) {
-            if (requestCode == DROP_IN_REQUEST) {
-                DropInResult result = data.getParcelableExtra(DropInResult.EXTRA_DROP_IN_RESULT);
-                displayResult(result.getPaymentMethodNonce(), result.getDeviceData());
-            } else if (requestCode == CUSTOM_REQUEST || requestCode == PAYPAL_REQUEST) {
-                displayResult((PaymentMethodNonce) data.getParcelableExtra(EXTRA_PAYMENT_METHOD_NONCE),
-                        data.getStringExtra(EXTRA_DEVICE_DATA));
-            }
-
-            if (mNonce instanceof CardNonce && Settings.isThreeDSecureEnabled(this)) {
-                mLoading = ProgressDialog.show(this, getString(R.string.loading),
-                        getString(R.string.loading), true, false);
-                ThreeDSecure.performVerification(mBraintreeFragment, mNonce.getNonce(), "1");
-            } else {
-                mCreateTransactionButton.setEnabled(true);
-            }
-        } else if (resultCode != RESULT_CANCELED) {
-            safelyCloseLoadingView();
-            showDialog(((Exception) data.getSerializableExtra(DropInActivity.EXTRA_ERROR)).getMessage());
-        }
-    }
-
-    @Override
-    protected void reset() {
-        enableButtons(false);
-        mCreateTransactionButton.setEnabled(false);
-
-        clearNonce();
-    }
-
-    @Override
-    protected void onAuthorizationFetched() {
-        try {
-            mBraintreeFragment = BraintreeFragment.newInstance(this, mAuthorization);
-            enableButtons(true);
-        } catch (InvalidArgumentException e) {
-            showDialog(e.getMessage());
-        }
-    }
-
-    private void displayResult(PaymentMethodNonce paymentMethodNonce, String deviceData) {
-        mNonce = paymentMethodNonce;
-
-        mNonceIcon.setImageResource(PaymentMethodType.forType(mNonce).getDrawable());
-        mNonceIcon.setVisibility(VISIBLE);
-
-        mNonceString.setText(getString(R.string.nonce) + ": " + mNonce.getNonce());
-        mNonceString.setVisibility(VISIBLE);
-
-        String details = "";
-        if (mNonce instanceof CardNonce) {
-            CardNonce cardNonce = (CardNonce) mNonce;
-
-            details = "Card Last Two: " + cardNonce.getLastTwo() + "\n";
-            details += "3DS isLiabilityShifted: " + cardNonce.getThreeDSecureInfo().isLiabilityShifted() + "\n";
-            details += "3DS isLiabilityShiftPossible: " + cardNonce.getThreeDSecureInfo().isLiabilityShiftPossible();
-        } else if (mNonce instanceof PayPalAccountNonce) {
-            PayPalAccountNonce paypalAccountNonce = (PayPalAccountNonce) mNonce;
-
-            details = "First name: " + paypalAccountNonce.getFirstName() + "\n";
-            details += "Last name: " + paypalAccountNonce.getLastName() + "\n";
-            details += "Email: " + paypalAccountNonce.getEmail() + "\n";
-            details += "Phone: " + paypalAccountNonce.getPhone() + "\n";
-            details += "Payer id: " + paypalAccountNonce.getPayerId() + "\n";
-            details += "Client metadata id: " + paypalAccountNonce.getClientMetadataId() + "\n";
-            details += "Billing address: " + formatAddress(paypalAccountNonce.getBillingAddress()) + "\n";
-            details += "Shipping address: " + formatAddress(paypalAccountNonce.getShippingAddress());
-        } else if (mNonce instanceof AndroidPayCardNonce) {
-            AndroidPayCardNonce androidPayCardNonce = (AndroidPayCardNonce) mNonce;
-
-            details = "Underlying Card Last Two: " + androidPayCardNonce.getLastTwo() + "\n";
-            details += "Email: " + androidPayCardNonce.getEmail() + "\n";
-            details += "Billing address: " + formatAddress(androidPayCardNonce.getBillingAddress()) + "\n";
-            details += "Shipping address: " + formatAddress(androidPayCardNonce.getShippingAddress());
-        } else if (mNonce instanceof VenmoAccountNonce) {
-            VenmoAccountNonce venmoAccountNonce = (VenmoAccountNonce) mNonce;
-            details = "Username: " + venmoAccountNonce.getUsername();
-        }
-
-        mNonceDetails.setText(details);
-        mNonceDetails.setVisibility(VISIBLE);
-
-        mDeviceData.setText("Device Data: " + deviceData);
-        mDeviceData.setVisibility(VISIBLE);
-
-        mCreateTransactionButton.setEnabled(true);
-    }
-
-    private void clearNonce() {
-        mNonceIcon.setVisibility(GONE);
-        mNonceString.setVisibility(GONE);
-        mNonceDetails.setVisibility(GONE);
-        mDeviceData.setVisibility(GONE);
-        mCreateTransactionButton.setEnabled(false);
-    }
-
-    private String formatAddress(PostalAddress address) {
-        return address.getRecipientName() + " " + address.getStreetAddress() + " " +
-                address.getExtendedAddress() + " " + address.getLocality() + " " + address.getRegion() +
-                " " + address.getPostalCode() + " " + address.getCountryCodeAlpha2();
-    }
-
-    private String formatAddress(UserAddress address) {
-        if(address == null) {
-            return "null";
-        }
-        return address.getName() + " " + address.getAddress1() + " " + address.getAddress2() + " " +
-                address.getAddress3() + " " + address.getAddress4() + " " + address.getAddress5() + " " +
-                address.getLocality() + " " + address.getAdministrativeArea() + " " + address.getPostalCode() + " " +
-                address.getSortingCode() + " " + address.getCountryCode();
     }
 
     private Cart getAndroidPayCart() {
@@ -290,9 +233,24 @@ public class MainActivity extends BaseActivity implements PaymentMethodNonceCrea
         mCustomButton.setEnabled(enable);
     }
 
-    private void safelyCloseLoadingView() {
-        if (mLoading != null && mLoading.isShowing()) {
-            mLoading.dismiss();
-        }
+    @Override
+    public void onCancel(int requestCode) {
+
+    }
+
+    @Override
+    public void onError(Exception error) {
+
+    }
+
+    @Override
+    public void onPaymentMethodNonceCreated(PaymentMethodNonce paymentMethodNonce) {
+
+    }
+
+
+
+    private void displayResult(PaymentMethodNonce paymentMethodNonce, String deviceData) {
+
     }
 }
