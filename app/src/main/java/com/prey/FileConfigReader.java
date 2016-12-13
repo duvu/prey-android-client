@@ -149,4 +149,9 @@ public class FileConfigReader {
         return Integer.parseInt(properties.getProperty("distance-location"));
     }
 
+    public String getBase64EncodedPublicKey() {
+        return properties.getProperty("base64EncodedPublicKey");
+    }
+
+
 }

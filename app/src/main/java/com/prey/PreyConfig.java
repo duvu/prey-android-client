@@ -866,6 +866,10 @@ public class PreyConfig {
         return FileConfigReader.getInstance(this.ctx).getDistanceLocation();
     }
 
+    public String getBase64EncodedPublicKey(){
+        return FileConfigReader.getInstance(this.ctx).getBase64EncodedPublicKey();
+    }
+
     public boolean isSentUuidSerialNumber() {
         return getBoolean(PreyConfig.SENT_UUID_SERIAL_NUMBER, false);
     }

@@ -104,6 +104,18 @@ public class PreyConfigurationActivity extends PreferenceActivity {
             }
         });
 
+        Preference pUpgrade = findPreference("PREFS_UPGRADE");
+        pUpgrade.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+            public boolean onPreferenceClick(Preference preference) {
+                try {
+                    Intent intent = new Intent(getApplicationContext(), PlansActivity.class);
+                    startActivity(intent);
+                } catch (Exception e) {
+                }
+                return false;
+            }
+        });
 
         Preference pSMS= findPreference("PREFS_SMS");
         pSMS.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {

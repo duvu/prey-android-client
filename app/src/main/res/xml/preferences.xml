@@ -16,6 +16,13 @@
             android:summary="@string/preferences_go_to_control_panel_summary"
             android:title="@string/preferences_go_to_control_panel_title" >
         </Preference>
+
+        <Preference
+            android:key="PREFS_UPGRADE"
+            android:summary="@string/preferences_upgrade_summary"
+            android:title="@string/preferences_upgrade_title" >
+        </Preference>
+
     </PreferenceCategory>
 
     <PreferenceCategory

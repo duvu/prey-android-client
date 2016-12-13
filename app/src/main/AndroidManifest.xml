@@ -91,7 +91,7 @@
 
 
         <activity
-            android:name="com.prey.activities.LoginActivity"
+            android:name="com.prey.activities.PlansActivity"
             android:clearTaskOnLaunch="true"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleInstance"
@@ -104,6 +104,13 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="com.prey.activities.LoginActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+         >
+
+        </activity>
         <activity
             android:name=".barcodereader.BarcodeActivity"
             android:configChanges="keyboardHidden|orientation"

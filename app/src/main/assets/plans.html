@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Prey Anti Theft: Track &amp; find stolen Phones, Tablets and Laptops</title>
+    <link rel="stylesheet" href="file:///android_asset/stylesheets/style.css?0.1.0">
+</head>
+<body>
+<div id="wrap">
+    <section id="central">
+        <div id="head"><img src="file:///android_asset/images/logo.svg" alt="Prey"><p>Pricing</p></div>
+        <p class="disclaimer"><small>All our plans include</small></p>
+        <ul class="features">
+            <li>Geolocation</li>
+            <li>Alert Messages</li>
+            <li>Screen Lock</li>
+            <li>File Retrieval</li>
+            <li>Control Zones</li>
+            <li>Remote Wipe*<small class="note">* Not supported in iOS (Oh no, bad apple)</small></li>
+        </ul>
+        <a href="#" class="pro">If you need to protect more than 10 devices, come over here.</a>
+        <nav class="alt-routes">
+            <a href="#" onClick="back()"><p>Basic</p><small>Free</small><span><b>3</b> Max Devices</span><span><b>20</b> Max Reports</span></a>
+            <a href="#" onClick="plan('personal')"><p>Personal</p><small>5<em> USD/mo</em></small><span><b>3</b> Max Devices</span><span><b>100</b> Max Reports</span></a>
+            <a href="#" onClick="plan('home')"><p>Home</p><small>15<em> USD/mo</em></small><span><b>10</b> Max Devices</span><span><b>100</b> Max Reports</span></a>
+        </nav>
+    </section>
+    <script type="text/javascript">
+    function plan(planName) {
+        Android.plan(planName);
+    }
+    function back() {
+        Android.back();
+    }
+    </script>
+</div>
+</body>
+</html>
