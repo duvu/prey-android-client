@@ -34,6 +34,8 @@
     <string name="protect_button_subtitle_1">PREY ACCOUNT</string>
     <string name="protect_button_title_2">CONFIGURE</string>
     <string name="protect_button_subtitle_2">PREY SETTINGS</string>
+    <string name="protect_button_title_3">UPGRADE</string>
+    <string name="protect_button_subtitle_3">PRO</string>
     <string name="protect_title_3">Take the tour</string>
     <string name="protect_title_4">What can Prey do for you...</string>
     <string name="protect_title_5">How to uninstall Prey</string>
@@ -279,12 +281,54 @@
     <string name="preferences_upgrade_summary">Upgrade to Pro</string>
     <string name="preferences_upgrade_title">Upgrade to Pro</string>
     <string name="layout_upgrade_title_pro">Prey Pro</string>
-    <string name="button_upgrade_monthly">$2.99\nMonthly</string>
-    <string name="button_upgrade_yearly">$29.99\nYearly</string>
+    <string name="button_upgrade_personal">PERSONAL</string>
+    <string name="button_upgrade_home">HOME</string>
+    <string name="button_upgrade_personal_description">USD $ 5 / Month\n* Max Devices 3\n* Control Zones 3\n* Max Reports 100</string>
+    <string name="button_upgrade_home_description">USD $ 15 / Month\n* Max Devices 10\n* Control Zones &#8734;\n* Max Reports 100</string>
 
     <string name="text_upgrade_devices">Full protection for your devices</string>
     <string name="text_upgrade_os">Up to 10 devices</string>
     <string name="text_upgrade_report">100x reports per devices</string>
+    <string name="text_upgrade_geolocation">Geolocation</string>
+    <string name="text_upgrade_geolocation_description">Track your phone, laptop and tablet - wherever they may be.</string>
+    <string name="text_upgrade_alertmessages">Alert Messages</string>
+    <string name="text_upgrade_alertmessages_description">Send a personal message to your phone even if it’s blocked. Or sound a super loud alarm that won’t care if your device is on silent mode.</string>
     <string name="text_upgrade_back">Back</string>
+
+    <string name="text_upgrade_blabla">El contenido patrocinado nos ayuda a seguir proporcionándote una versión gratuita de Pocket. Cuando te pases a Pocket Premium no verás ningún anuncio, y además apoyarás a Pocket de forma más directa.</string>
+
+    <string name="text_upgrade_title">Prey Pro</string>
+    <string name="text_upgrade_subtitle">Xxxxxx xxx. Xxxxx xxx xxxx xxx.\nUpgrade Now</string>
+    <string name="text_upgrade_head">Upgrade</string>
+
+    <string name="feat_reports_title">The Prey Report</string>
+    <string name="feat_reports_subtitle">No other app or service gets as serious as our Prey report. Just set your device to “Missing” on your control panel and you\’ll start receiving reports with geolocation, pictures, and more!.</string>
+    <string name="feat_camera_title">Front and Back Camera</string>
+    <string name="feat_camera_subtitle">Taken silently so thieves won\’t stand a chance. Prey will gather and deliver evidence back to you, including pictures of who\’s using your stolen device, extremely crucial data for the police.</string>
+    <string name="feat_geolocation_title">Geolocation</string>
+    <string name="feat_geolocation_subtitle">Track your phone, laptop and tablet - wherever they may be. It doesn\’t matter where in the world you are or where in the world you think your lost device might be, we\’ve got your back.</string>
+    <string name="feat_device_lock_title">Lock Your Device</string>
+    <string name="feat_device_lock_subtitle">Don\’t leave your data at stake. Prey allows you to remotely lock down your devices to ensure that no one can access to your private stuff. Privacy first!.</string>
+    <string name="feat_wipe_title">Wipe Your Data</string>
+    <string name="feat_wipe_subtitle">Boom. All gone. Delete everything, from the private to the important to the utterly embarrassing. It\’s as easy as logging into your account and just selecting the files you wish to delete.</string>
+    <string name="feat_controlzones_title">Control Zones</string>
+    <string name="feat_controlzones_subtitle">Create zones in your city and get notified whenever your smartphone leaves or enters an area, so no more constantly checking your devices\’ whereabouts. It\’s available for iOS and Android.</string>
+    <string name="feat_data_recovery_title">Data Recovery</string>
+    <string name="feat_data_recovery_subtitle">File Retrieval is our star data recovery feature. Retrieve your sensitive information by getting an email with a download link with what you need. Just make sure the device is online!.</string>
+    <string name="feat_alarm_title">Super Loud Alarm</string>
+    <string name="feat_alarm_subtitle">Even if your device\’s sound is off, it\’ll sound like gangbusters, making your device impossible to miss... even in a cluttered room under a pile of laundry (haven\’t we all been there?).</string>
+    <string name="feat_adv_search_title">Advanced Search (Business)</string>
+    <string name="feat_adv_search_subtitle">Use our versatile search engine to find device information associated to tags and labels. Organizing and categorizing large device fleets has never been easier for busy IT managers like you.</string>
+    <string name="feat_support_title">Personalized Support (Business)</string>
+    <string name="feat_support_subtitle">Pro users and Business accounts will have our very dedicated support team helping them and guiding them through every part of the process, from mass deployment to assisting in device recovery.</string>
+    <string name="feat_custom_labels_title">Customizable Labels (Business)</string>
+    <string name="feat_custom_labels_subtitle">Manage large fleet of devices smoothy by tagging them and organizing them with our customizable labels. Some fixed labels include device operating system, Prey version, o device type. Simple!.</string>
+    <string name="feat_bulk_actions_title">Group actions (Coming soon!)</string>
+    <string name="feat_bulk_actions_subtitle">Bulk actions is an IT manager\’s dream come true. Need to trigger a thousand alarms on a thousand different devices? Or maybe set 60 devices to missing? No matter how big the task, we got you.</string>
+
+
+
+
+
 
 </resources>

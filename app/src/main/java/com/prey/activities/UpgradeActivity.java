@@ -95,7 +95,7 @@ public class UpgradeActivity  extends Activity implements IabBroadcastReceiver.I
         linearBlack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(UpgradeActivity.this, PreyConfigurationActivity.class);
+                Intent intent = new Intent(UpgradeActivity.this, DeviceReadyActivity.class);
                 PreyStatus.getInstance().setPreyConfigurationActivityResume(true);
                 startActivity(intent);
                 finish();

@@ -5,19 +5,11 @@
     android:background="@color/white"
     android:orientation="vertical"
     android:clickable="true">
-    <ImageView
-        android:id="@+id/screen_wait"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center"
-        android:contentDescription="@string/content_description_app_loading_image"
-        android:src="@drawable/wait"
-        android:visibility="gone" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-
         android:background="@color/black"
         android:id="@+id/linear_black"
         android:orientation="horizontal">
@@ -27,173 +19,739 @@
             android:src="@drawable/larr"
             android:gravity="center_vertical"
             android:layout_marginLeft="10dp"
-
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:text="@string/text_upgrade_back"
-            android:textSize="16sp"
+            android:layout_marginRight="40dp"
+            android:text="@string/text_upgrade_head"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:fontFamily="Avenir Next LT Pro"
             android:textColor="@color/white"
-            android:gravity="center_vertical" />
-    </LinearLayout>
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/logo"
-        android:id="@+id/image_logo"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/linear_black"
-        android:layout_centerHorizontal="true" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/layout_upgrade_title_pro"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:fontFamily="Avenir Next LT Pro"
-        android:id="@+id/text_title_pro"
-        android:layout_below="@+id/image_logo"
-        android:layout_centerHorizontal="true"
-        />
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/black"
-        android:layout_below="@+id/text_title_pro"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"
-        android:id="@+id/linear_borde1"  />
-
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="80dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@color/white"
-        android:id="@+id/linear_text1"
-        android:orientation="horizontal"
-        android:layout_below="@+id/linear_borde1"
-        android:layout_marginTop="10dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/icon_devices" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:textSize="18sp"
-            android:fontFamily="Avenir Next LT Pro"
-            android:gravity="center_vertical"
-            android:text="@string/text_upgrade_devices" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="80dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@color/white"
-        android:id="@+id/linear_text2"
-        android:orientation="horizontal"
-        android:layout_below="@+id/linear_text1"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/icon_multiple_os" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:textSize="18sp"
-            android:fontFamily="Avenir Next LT Pro"
-            android:gravity="center_vertical"
-            android:text="@string/text_upgrade_os" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="80dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@color/white"
-        android:id="@+id/linear_text3"
-        android:orientation="horizontal"
-        android:layout_below="@+id/linear_text2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/icon_report" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:textSize="18sp"
-            android:fontFamily="Avenir Next LT Pro"
-            android:gravity="center_vertical"
-            android:text="@string/text_upgrade_report" />
+            android:gravity="center" />
     </LinearLayout>
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/black"
-        android:layout_below="@+id/linear_text3"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"
-        android:id="@+id/linear_borde2" />
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-
-        android:id="@+id/linear_foot"
-        android:orientation="horizontal"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="20dp"
-        android:weightSum="2">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:text="@string/button_upgrade_monthly"
-            android:layout_weight="1"
-            android:id="@+id/button_monthly"
-            android:background="#3578BB"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:fontFamily="Avenir Next LT Pro"
-            android:layout_marginRight="10dp"
-            android:onClick="onUpgradeMonthlyAppButtonClicked"
-            />
+        android:layout_below="@+id/linear_black"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:text="@string/button_upgrade_yearly"
-            android:layout_weight="1"
-            android:id="@+id/button_yearly"
-            android:layout_marginLeft="10dp"
-            android:background="#3578BB"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:fontFamily="Avenir Next LT Pro"
-            android:onClick="onUpgradeYearlyAppButtonClicked" />
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:background="@color/screen_bg"
+                android:orientation="vertical"
+                android:id="@+id/linear_buttons">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/text_upgrade_title"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:fontFamily="Avenir Next LT Pro"
+                    android:textColor="@color/white"
+                    android:gravity="center" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/text_upgrade_subtitle"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:fontFamily="Avenir Next LT Pro"
+                    android:textColor="@color/white"
+                    android:gravity="center" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal"
+
+                    android:layout_marginTop="20dp"
+                    android:weightSum="2">
+
+
+                        <Button
+                            android:layout_width="150dp"
+                            android:layout_height="50dp"
+                            android:text="@string/button_upgrade_personal"
+                            android:layout_weight="1"
+                            android:id="@+id/button_monthly"
+                            android:background="#3578BB"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            android:fontFamily="Avenir Next LT Pro"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:onClick="onUpgradeMonthlyAppButtonClicked"
+                            />
+
+
+
+                        <Button
+                            android:layout_width="150dp"
+                            android:layout_height="50dp"
+                            android:text="@string/button_upgrade_home"
+                            android:layout_weight="1"
+                            android:id="@+id/button_yearly"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:background="#3578BB"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            android:fontFamily="Avenir Next LT Pro"
+                            android:onClick="onUpgradeYearlyAppButtonClicked" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:orientation="horizontal"
+
+
+                        android:weightSum="2">
+                    <TextView
+                        android:layout_width="200dp"
+                        android:layout_height="100dp"
+                        android:layout_weight="1"
+                        android:textSize="14sp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:fontFamily="Avenir Next LT Pro"
+                        android:gravity="center_vertical"
+                        android:text="@string/button_upgrade_personal_description"
+                        android:textColor="@color/white"/>
+                        <TextView
+                            android:layout_width="200dp"
+                            android:layout_height="100dp"
+                            android:layout_weight="1"
+                            android:textSize="14sp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:fontFamily="Avenir Next LT Pro"
+                            android:gravity="center_vertical"
+                            android:text="@string/button_upgrade_home_description"
+                            android:textColor="@color/white"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/black"
+                android:layout_below="@+id/linear_buttons"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/linear_borde0" />
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="200dp"
+                android:background="@color/white"
+                android:id="@+id/linear_text0"
+                android:orientation="horizontal"
+                android:layout_below="@+id/linear_borde0">
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="200dp"
+                    android:src="@drawable/feat_reports" />
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="200dp"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="18sp"
+                        android:fontFamily="Avenir Next LT Pro"
+                        android:gravity="center_vertical"
+                        android:text="@string/feat_reports_title"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="18sp"
+                        android:fontFamily="Avenir Next LT Pro"
+                        android:gravity="center_vertical"
+                        android:text="@string/feat_reports_subtitle"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
+            </LinearLayout>
+
+
+
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/black"
+                android:layout_below="@+id/linear_text1"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/linear_borde2" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="200dp"
+                android:background="@color/white"
+                android:id="@+id/linear_text2"
+                android:orientation="horizontal"
+                android:layout_below="@+id/linear_borde2">
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="200dp"
+                    android:src="@drawable/feat_camera" />
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="200dp"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="18sp"
+                        android:fontFamily="Avenir Next LT Pro"
+                        android:gravity="center_vertical"
+                        android:text="@string/feat_camera_title"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="18sp"
+                        android:fontFamily="Avenir Next LT Pro"
+                        android:gravity="center_vertical"
+                        android:text="@string/feat_camera_subtitle"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/black"
+                android:layout_below="@+id/linear_text2"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/linear_borde3" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="200dp"
+                android:background="@color/white"
+                android:id="@+id/linear_text3"
+                android:orientation="horizontal"
+                android:layout_below="@+id/linear_borde3">
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="200dp"
+                    android:src="@drawable/feat_geolocation" />
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="200dp"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="18sp"
+                        android:fontFamily="Avenir Next LT Pro"
+                        android:gravity="center_vertical"
+                        android:text="@string/feat_geolocation_title"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="18sp"
+                        android:fontFamily="Avenir Next LT Pro"
+                        android:gravity="center_vertical"
+                        android:text="@string/feat_geolocation_subtitle"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/black"
+                android:layout_below="@+id/linear_text3"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/linear_borde4" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="200dp"
+                android:background="@color/white"
+                android:id="@+id/linear_text4"
+                android:orientation="horizontal"
+                android:layout_below="@+id/linear_borde4">
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="200dp"
+                    android:src="@drawable/feat_device_lock" />
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="200dp"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="18sp"
+                        android:fontFamily="Avenir Next LT Pro"
+                        android:gravity="center_vertical"
+                        android:text="@string/feat_device_lock_title"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="18sp"
+                        android:fontFamily="Avenir Next LT Pro"
+                        android:gravity="center_vertical"
+                        android:text="@string/feat_device_lock_subtitle"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/black"
+                android:layout_below="@+id/linear_text4"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/linear_borde5" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="200dp"
+                android:background="@color/white"
+                android:id="@+id/linear_text5"
+                android:orientation="horizontal"
+                android:layout_below="@+id/linear_borde5">
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="200dp"
+                    android:src="@drawable/feat_wipe" />
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="200dp"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="18sp"
+                        android:fontFamily="Avenir Next LT Pro"
+                        android:gravity="center_vertical"
+                        android:text="@string/feat_wipe_title"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="18sp"
+                        android:fontFamily="Avenir Next LT Pro"
+                        android:gravity="center_vertical"
+                        android:text="@string/feat_wipe_subtitle"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/black"
+                android:layout_below="@+id/linear_text5"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/linear_borde6" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="200dp"
+                android:background="@color/white"
+                android:id="@+id/linear_text6"
+                android:orientation="horizontal"
+                android:layout_below="@+id/linear_borde6">
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="200dp"
+                    android:src="@drawable/feat_controlzones" />
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="200dp"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="18sp"
+                        android:fontFamily="Avenir Next LT Pro"
+                        android:gravity="center_vertical"
+                        android:text="@string/feat_controlzones_title"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="18sp"
+                        android:fontFamily="Avenir Next LT Pro"
+                        android:gravity="center_vertical"
+                        android:text="@string/feat_controlzones_subtitle"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/black"
+                android:layout_below="@+id/linear_text6"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/linear_borde7" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="200dp"
+                android:background="@color/white"
+                android:id="@+id/linear_text7"
+                android:orientation="horizontal"
+                android:layout_below="@+id/linear_borde7">
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="200dp"
+                    android:src="@drawable/feat_data_recovery" />
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="200dp"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="18sp"
+                        android:fontFamily="Avenir Next LT Pro"
+                        android:gravity="center_vertical"
+                        android:text="@string/feat_data_recovery_title"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="18sp"
+                        android:fontFamily="Avenir Next LT Pro"
+                        android:gravity="center_vertical"
+                        android:text="@string/feat_data_recovery_subtitle"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/black"
+                android:layout_below="@+id/linear_text7"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/linear_borde8" />
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="200dp"
+                android:background="@color/white"
+                android:id="@+id/linear_text8"
+                android:orientation="horizontal"
+                android:layout_below="@+id/linear_borde8">
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="200dp"
+                    android:src="@drawable/feat_alarm" />
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="200dp"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="18sp"
+                        android:fontFamily="Avenir Next LT Pro"
+                        android:gravity="center_vertical"
+                        android:text="@string/feat_alarm_title"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="18sp"
+                        android:fontFamily="Avenir Next LT Pro"
+                        android:gravity="center_vertical"
+                        android:text="@string/feat_alarm_subtitle"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/black"
+                android:layout_below="@+id/linear_text8"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/linear_borde9" />
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="200dp"
+                android:background="@color/white"
+                android:id="@+id/linear_text9"
+                android:orientation="horizontal"
+                android:layout_below="@+id/linear_borde9">
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="200dp"
+                    android:src="@drawable/feat_adv_search" />
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="200dp"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="18sp"
+                        android:fontFamily="Avenir Next LT Pro"
+                        android:gravity="center_vertical"
+                        android:text="@string/feat_adv_search_title"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="18sp"
+                        android:fontFamily="Avenir Next LT Pro"
+                        android:gravity="center_vertical"
+                        android:text="@string/feat_adv_search_subtitle"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/black"
+                android:layout_below="@+id/linear_text9"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/linear_borde10" />
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="200dp"
+                android:background="@color/white"
+                android:id="@+id/linear_text10"
+                android:orientation="horizontal"
+                android:layout_below="@+id/linear_borde10">
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="200dp"
+                    android:src="@drawable/feat_support" />
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="200dp"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="18sp"
+                        android:fontFamily="Avenir Next LT Pro"
+                        android:gravity="center_vertical"
+                        android:text="@string/feat_support_title"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="18sp"
+                        android:fontFamily="Avenir Next LT Pro"
+                        android:gravity="center_vertical"
+                        android:text="@string/feat_support_subtitle"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/black"
+                android:layout_below="@+id/linear_text10"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/linear_borde11" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="200dp"
+                android:background="@color/white"
+                android:id="@+id/linear_text11"
+                android:orientation="horizontal"
+                android:layout_below="@+id/linear_borde11">
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="200dp"
+                    android:src="@drawable/feat_custom_labels" />
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="200dp"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="18sp"
+                        android:fontFamily="Avenir Next LT Pro"
+                        android:gravity="center_vertical"
+                        android:text="@string/feat_custom_labels_title"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="18sp"
+                        android:fontFamily="Avenir Next LT Pro"
+                        android:gravity="center_vertical"
+                        android:text="@string/feat_custom_labels_subtitle"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/black"
+                android:layout_below="@+id/linear_text11"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/linear_borde12" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="200dp"
+                android:background="@color/white"
+                android:id="@+id/linear_text12"
+                android:orientation="horizontal"
+                android:layout_below="@+id/linear_borde12">
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="200dp"
+                    android:src="@drawable/feat_bulk_actions" />
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="200dp"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="18sp"
+                        android:fontFamily="Avenir Next LT Pro"
+                        android:gravity="center_vertical"
+                        android:text="@string/feat_bulk_actions_title"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="18sp"
+                        android:fontFamily="Avenir Next LT Pro"
+                        android:gravity="center_vertical"
+                        android:text="@string/feat_bulk_actions_subtitle"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/black"
+                android:layout_below="@+id/linear_text12"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/linear_borde13" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

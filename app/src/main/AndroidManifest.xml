@@ -3,7 +3,7 @@
     package="com.prey"
     android:installLocation="internalOnly"
     android:versionCode="125"
-    android:versionName="1.6.6" >
+    android:versionName="1.6.7" >
 
 
 
@@ -91,7 +91,7 @@
 
 
         <activity
-            android:name="com.prey.activities.PlansActivity"
+            android:name="com.prey.activities.LoginActivity"
             android:clearTaskOnLaunch="true"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleInstance"
@@ -105,7 +105,14 @@
         </activity>
 
         <activity
-            android:name="com.prey.activities.LoginActivity"
+            android:name="com.prey.activities.UpgradeActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            >
+        </activity>
+
+        <activity
+            android:name="com.prey.activities.PlansActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
          >

@@ -121,6 +121,18 @@ public class DeviceReadyActivity extends AppCompatActivity
             }
         });
 
+        LinearLayout linearLayout3=(LinearLayout)findViewById(R.id.linearLayout3);
+        linearLayout3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = null;
+
+                intent = new Intent(getApplication(), UpgradeActivity.class);
+
+                startActivity(intent);
+                finish();
+            }
+        });
 
 
 
