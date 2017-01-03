@@ -286,6 +286,16 @@
     <string name="button_upgrade_personal_description">USD $ 5 / Month\n* Max Devices 3\n* Control Zones 3\n* Max Reports 100</string>
     <string name="button_upgrade_home_description">USD $ 15 / Month\n* Max Devices 10\n* Control Zones &#8734;\n* Max Reports 100</string>
 
+    <string name="button_upgrade_personal_description2">USD $ 5 / Month\nUSD $ 54 / Year\n* Max Devices 3\n* Control Zones 3\n* Max Reports 100</string>
+    <string name="button_upgrade_home_description2">USD $ 15 / Month\nUSD $ 162 / Year\n* Max Devices 10\n* Control Zones &#8734;\n* Max Reports 100</string>
+
+
+    <string name="button_upgrade_personal_month">USD $ 5 / Month</string>
+    <string name="button_upgrade_personal_year">USD $ 54 / Year</string>
+
+    <string name="button_upgrade_home_month">USD $ 15 / Month</string>
+    <string name="button_upgrade_home_year">USD $ 162 / Year</string>
+
     <string name="text_upgrade_devices">Full protection for your devices</string>
     <string name="text_upgrade_os">Up to 10 devices</string>
     <string name="text_upgrade_report">100x reports per devices</string>

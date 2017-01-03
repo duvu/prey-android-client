@@ -8,10 +8,12 @@ package com.prey.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -185,6 +187,84 @@ public class UpgradeActivity  extends Activity implements IabBroadcastReceiver.I
     }
 
     public void onUpgradeMonthlyAppButtonClicked(View arg0) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        String title = getString(R.string.button_upgrade_personal);
+        String message = getResources().getString(R.string.button_upgrade_personal_description2);
+        alertDialog.setTitle(title);
+        alertDialog.setMessage(message);
+        alertDialog.setPositiveButton(R.string.button_upgrade_personal_month,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        List<String> oldSkus = null;
+                        try {
+                            String payload = "";
+                            mHelper.launchPurchaseFlow(getParent(), SKU_PERSONAL, IabHelper.ITEM_TYPE_SUBS,
+                                    oldSkus, RC_REQUEST, mPurchaseFinishedListener, payload);
+                        } catch (IabHelper.IabAsyncInProgressException e) {
+                            complain("Error launching purchase flow. Another async operation in progress.");
+                            setWaitScreen(false);
+                        }
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.setNegativeButton(R.string.button_upgrade_personal_year,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        List<String> oldSkus = null;
+                        try {
+                            String payload = "";
+                            mHelper.launchPurchaseFlow(getParent(), SKU_PERSONAL, IabHelper.ITEM_TYPE_SUBS,
+                                    oldSkus, RC_REQUEST, mPurchaseFinishedListener, payload);
+                        } catch (IabHelper.IabAsyncInProgressException e) {
+                            complain("Error launching purchase flow. Another async operation in progress.");
+                            setWaitScreen(false);
+                        }
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+    }
+
+    public void onUpgradeYearlyAppButtonClicked(View arg0) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        String title = getString(R.string.button_upgrade_home);
+        String message = getResources().getString(R.string.button_upgrade_home_description2);
+        alertDialog.setTitle(title);
+        alertDialog.setMessage(message);
+        alertDialog.setPositiveButton(R.string.button_upgrade_home_month,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        List<String> oldSkus = null;
+                        try {
+                            String payload = "";
+                            mHelper.launchPurchaseFlow(getParent(), SKU_PERSONAL, IabHelper.ITEM_TYPE_SUBS,
+                                    oldSkus, RC_REQUEST, mPurchaseFinishedListener, payload);
+                        } catch (IabHelper.IabAsyncInProgressException e) {
+                            complain("Error launching purchase flow. Another async operation in progress.");
+                            setWaitScreen(false);
+                        }
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.setNegativeButton(R.string.button_upgrade_home_year,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        List<String> oldSkus = null;
+                        try {
+                            String payload = "";
+                            mHelper.launchPurchaseFlow(getParent(), SKU_PERSONAL, IabHelper.ITEM_TYPE_SUBS,
+                                    oldSkus, RC_REQUEST, mPurchaseFinishedListener, payload);
+                        } catch (IabHelper.IabAsyncInProgressException e) {
+                            complain("Error launching purchase flow. Another async operation in progress.");
+                            setWaitScreen(false);
+                        }
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+    }
+
+    public void onUpgradeMonthlyAppButtonClicked2(View arg0) {
         PreyLogger.i("onClick of button_monthly");
         List<String> oldSkus = null;
         try {
@@ -198,7 +278,7 @@ public class UpgradeActivity  extends Activity implements IabBroadcastReceiver.I
 
     }
 
-    public void onUpgradeYearlyAppButtonClicked(View arg0){
+    public void onUpgradeYearlyAppButtonClicked2(View arg0){
         PreyLogger.i("onClick of button_yearly");
         List<String> oldSkus = null;
         try {
