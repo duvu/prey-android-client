@@ -45,24 +45,22 @@ public class WelcomeActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-
+        PreyLogger.d("onCreate of WelcomeActivity");
         menu();
 
     }
 
 
     public void menu() {
-        PreyLogger.i("menu ready");
-
+        PreyLogger.d("menu WelcomeActivity");
         String email = PreyConfig.getPreyConfig(this).getEmail();
         if(email==null||"".equals(email)){
+            PreyLogger.d("email:"+email);
             PreyConfig.getPreyConfig(this).setProtectReady(false);
             PreyConfig.getPreyConfig(this).setProtectAccount(false);
             PreyConfig.getPreyConfig(this).setProtectTour(false);
         }
-
-        if (PreyConfig.getPreyConfig(this).getProtectReady()) {
+        if (PreyConfig.getPreyConfig(this).isThisDeviceAlreadyRegisteredWithPrey()){
             ready();
         } else {
             Intent intent = new Intent(getApplicationContext(), InitActivity.class);
@@ -72,11 +70,12 @@ public class WelcomeActivity extends FragmentActivity {
     }
 
     public void ready() {
+        PreyLogger.d("ready WelcomeActivity");
         PreyVerify.getInstance(this);
 
         Intent intent = null;
 
-            intent = new Intent(getApplicationContext(), CheckPasswordActivity.class);
+            intent = new Intent(getApplicationContext(), CheckPasswordHtmlActivity.class);
 
         startActivity(intent);
         finish();

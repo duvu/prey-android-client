@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.prey"
     android:installLocation="internalOnly"
-    android:versionCode="127"
-    android:versionName="1.6.8" >
+    android:versionCode="140"
+    android:versionName="1.8.1" >
 
 
 
@@ -21,9 +21,9 @@
     <uses-feature android:name="android.hardware.microphone" android:required="false" />
 
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR"/>
 
-
-
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -96,7 +96,9 @@
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleInstance"
             android:noHistory="true"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -189,7 +191,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.prey.activities.CheckPasswordActivity"
+            android:name="com.prey.activities.CheckPasswordHtmlActivity"
             android:launchMode="singleTask"
 
             android:windowSoftInputMode="stateHidden|adjustResize"
@@ -287,6 +289,7 @@
                 <!-- WIFI CHANGED -->
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+                <action android:name="android.intent.action.SIM_STATE_CHANGED" />
 
                 <!-- SIM CHANGED AND  BOOT COMPLETED -->
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -300,6 +303,9 @@
         <receiver android:name="com.prey.receivers.AlarmReportReceiver" />
         <receiver android:name="com.prey.receivers.AlarmScheduledReceiver" />
         <receiver android:name="com.prey.receivers.AlarmDisablePowerReceiver" />
+
+        <receiver android:name="com.prey.actions.aware.AwareAlarmReceiver" />
+        <service android:name="com.prey.actions.aware.AwareService" />
 
         <receiver android:name="com.prey.receivers.PreyDisablePowerOptionsReceiver">
             <intent-filter>
@@ -374,7 +380,8 @@
         <service android:name="com.prey.actions.report.ReportService" />
         <service android:name="com.prey.actions.geofences.GeofenceIntentService" />
         <service android:name="com.prey.actions.fileretrieval.FileretrievalService" />
-
+        <service android:name="com.prey.services.PreyLockService" />
+        <service android:name="com.prey.services.PreyOverlayService" />
     </application>
 
 </manifest>

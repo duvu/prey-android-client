@@ -27,14 +27,13 @@ import com.prey.PreyConfig;
 import com.prey.PreyLogger;
 import com.prey.PreyPermission;
 import com.prey.R;
-import com.prey.actions.fileretrieval.FileretrievalService;
-import com.prey.actions.report.ReportService;
-import com.prey.activities.CheckPasswordActivity;
-import com.prey.activities.DeviceReadyActivity;
+import com.prey.actions.fileretrieval.FileretrievalController;
+import com.prey.activities.CheckPasswordHtmlActivity;
 import com.prey.beta.actions.PreyBetaController;
 import com.prey.events.Event;
 import com.prey.managers.PreyConnectivityManager;
 import com.prey.managers.PreyTelephonyManager;
+import com.prey.net.offline.OfflineController;
 
 public class EventFactory {
 
@@ -44,10 +43,9 @@ public class EventFactory {
     private static final String ACTION_SHUTDOWN = "android.intent.action.ACTION_SHUTDOWN";
     private static final String AIRPLANE_MODE = "android.intent.action.AIRPLANE_MODE";
     private static final String BATTERY_LOW = "android.intent.action.BATTERY_LOW";
-    private static final String POWER_CONNECTED = "android.intent.action.ACTION_POWER_CONNECTED";
-    private static final String POWER_DISCONNECTED = "android.intent.action.ACTION_POWER_DISCONNECTED";
+    private static final String SIM_STATE_CHANGED = "android.intent.action.SIM_STATE_CHANGED";
 
-    public static Event getEvent(Context ctx, Intent intent) {
+    public static Event getEvent(final Context ctx, Intent intent) {
         String message = "getEvent[" + intent.getAction() + "]";
         PreyLogger.d(message);
         if (BOOT_COMPLETED.equals(intent.getAction())) {
@@ -55,12 +53,29 @@ public class EventFactory {
             if (PreyConfig.getPreyConfig(ctx).isSimChanged()) {
                 JSONObject info = new JSONObject();
                 try {
-                    info.put("new_phone_number", PreyTelephonyManager.getInstance(ctx).getLine1Number());
+                    String lineNumber=PreyTelephonyManager.getInstance(ctx).getLine1Number();
+                    if(lineNumber!=null&&!"".equals(lineNumber)) {
+                        info.put("new_phone_number", PreyTelephonyManager.getInstance(ctx).getLine1Number());
+                    }
                 } catch (Exception e) {
                 }
                 return new Event(Event.SIM_CHANGED, info.toString());
             } else {
                 return new Event(Event.TURNED_ON);
+            }
+        }
+        if (SIM_STATE_CHANGED.equals(intent.getAction())) {
+            if (PreyConfig.getPreyConfig(ctx).isSimChanged()) {
+                JSONObject info = new JSONObject();
+                try {
+                    String lineNumber=PreyTelephonyManager.getInstance(ctx).getLine1Number();
+                    if(lineNumber!=null&&!"".equals(lineNumber)) {
+                        info.put("new_phone_number", PreyTelephonyManager.getInstance(ctx).getLine1Number());
+                    }
+                    info.put("sim_serial_number", PreyConfig.getPreyConfig(ctx).getSimSerialNumber());
+                } catch (Exception e) {
+                }
+                return new Event(Event.SIM_CHANGED, info.toString());
             }
         }
         if (ACTION_SHUTDOWN.equals(intent.getAction())) {
@@ -94,13 +109,18 @@ public class EventFactory {
                     }
                 }
                 if(connected){
-                    try {
-                        Thread.sleep(4000);
-                    } catch (Exception e) {
-                    }
+                    Thread.sleep(4000);
                     PreyConfig.getPreyConfig(ctx).registerC2dm();
-                    Intent intentFile = new Intent(ctx, FileretrievalService.class);
-                    ctx.startService(intentFile);
+                    new Thread() {
+                        public void run() {
+                            FileretrievalController.getInstance().run(ctx);
+                        }
+                    }.start();
+                    new Thread() {
+                        public void run() {
+                            OfflineController.getInstance().run(ctx);
+                        }
+                    }.start();
                 }
             } catch (Exception e) {
             }
@@ -110,17 +130,24 @@ public class EventFactory {
             JSONObject info = new JSONObject();
             int wifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_UNKNOWN);
             PreyLogger.d("___wifiState:" + wifiState);
-
             try {
                 if (wifiState == WifiManager.WIFI_STATE_ENABLED) {
                     info.put("connected", "wifi");
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(6000);
                     } catch (Exception e) {
                     }
                     PreyConfig.getPreyConfig(ctx).registerC2dm();
-                    Intent intentFile = new Intent(ctx, FileretrievalService.class);
-                    ctx.startService(intentFile);
+                    new Thread() {
+                        public void run() {
+                            FileretrievalController.getInstance().run(ctx);
+                        }
+                    }.start();
+                    new Thread() {
+                        public void run() {
+                            OfflineController.getInstance().run(ctx);
+                        }
+                    }.start();
                 }
             } catch (Exception e) {
             }
@@ -146,13 +173,23 @@ public class EventFactory {
                 }
                 if(connected) {
                     PreyBetaController.startPrey(ctx);
-                    PreyConfig.getPreyConfig(ctx).registerC2dm();
-                    Intent intentFile = new Intent(ctx, FileretrievalService.class);
-                    ctx.startService(intentFile);
+                    try{
+                        PreyConfig.getPreyConfig(ctx).registerC2dm();
+                        Thread.sleep(4000);
+                    } catch (Exception e) {}
+                    new Thread() {
+                        public void run() {
+                            FileretrievalController.getInstance().run(ctx);
+                        }
+                    }.start();
+                    new Thread() {
+                        public void run() {
+                            OfflineController.getInstance().run(ctx);
+                        }
+                    }.start();
                 }
             }
         }
-
         return null;
     }
 
@@ -192,7 +229,7 @@ public class EventFactory {
                 PreyConfig.getPreyConfig(ctx).setCanAccessFineLocation(PreyPermission.canAccessFineLocation(ctx));
                 PreyConfig.getPreyConfig(ctx).setCanAccessReadPhoneState(PreyPermission.canAccessReadPhoneState(ctx));
                 if (!PreyPermission.canAccessCamera(ctx) || !PreyPermission.canAccessCoarseLocation(ctx) || !PreyPermission.canAccessFineLocation(ctx)|| !PreyPermission.canAccessReadPhoneState(ctx)) {
-                    Intent intent3 = new Intent(ctx, CheckPasswordActivity.class);
+                    Intent intent3 = new Intent(ctx, CheckPasswordHtmlActivity.class);
                     intent3.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
                             Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     PendingIntent pendingIntent = PendingIntent.getActivity(

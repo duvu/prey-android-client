@@ -2,7 +2,7 @@
     <string name="app_name">Prey</string>
 
     <string name="menu_title_1">current device status</string>
-    <string name="menu_title_2">NOT PROTECTED, YET.</string>
+    <string name="menu_title_2">NOT PROTECTED YET.</string>
     <string name="menu_title_3">WE ARE ALMOST THERE</string>
     <string name="menu_title_4">Administration privileges needed</string>
     <string name="menu_title_5">They’ll allow Prey to protect your phone and help you control it if it ever gets lost or stolen. Your information and privacy are safe with us.</string>
@@ -17,7 +17,7 @@
 
     <string name="signup_subtitle">prey account</string>
     <string name="signup_title">SIGN UP</string>
-    <string name="field_name_signup">username</string>
+    <string name="field_name_signup">your name</string>
     <string name="field_email_signup">email</string>
     <string name="field_password_signup">password</string>
     <string name="button_signup">CREATE MY NEW ACCOUNT</string>
@@ -25,7 +25,7 @@
 
     <string name="permission_error_title_1">current device status</string>
     <string name="permission_error_title_2">NOT PROTECTED.</string>
-    <string name="permission_error_title_3">Prey need these special privileges to lock your device and also to prevent thieves from uninstalling it</string>
+    <string name="permission_error_title_3">Prey utilizes the Device Administrator permission for its Remote Wipe and Lock features.\nGranting permission allows you to activate our data protection tools remotely to counter data theft.\nThe Remote Wipe lets you execute a data wipe on a lost device, while our Lock feature blocks access to it with a lock screen and a custom password.</string>
     <string name="permission_error_button_1">ACTIVATE PROTECTION</string>
 
     <string name="protect_title_1">current device status</string>
@@ -257,4 +257,17 @@
     <string name="barcode_error">"Error reading barcode: %1$s"</string>
     <string name="barcode_find_your_QR">Visit panel.preyproject.com/qr\n on your computer an scan the QR code</string>
 
+
+
+
+    <!-- Warning Android 7 Alert  -->
+    <string name="warning_android7_notification_title">Prey needs new permissions to guard this device</string>
+    <string name="warning_android7_notification_body">Take advantage of Prey’s new remote lock for Android 7.</string>
+    <string name="warning_android7_title">New permissions for a fortified lock!</string>
+    <string name="warning_android7_body">Prey’s improved lock for Android 7 now protects your device from being turned off and blocks access to the status bar. You’ll be asked to enable Prey to “draw over other apps” on the following menu to activate this feature.</string>
+    <string name="warning_android7_re_approve">Approve</string>
+    <string name="warning_android7_close">Close</string>
+
+    <string name="lock_access_denied">The device has been blocked by its owner in protection of his privacy, and property.\n\nEnter the password to unlock.</string>
+    <string name="lock_unlock">UNLOCK</string>
 </resources>

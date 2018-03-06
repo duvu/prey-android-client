@@ -67,12 +67,6 @@ public class LocationUtil {
         PreyLogger.d("status gps:" + isGpsEnabled + " net:" + isNetworkEnabled + " wifi:" + isWifiEnabled+" play:"+isGooglePlayServicesAvailable);
         String method = getMethod(isGpsEnabled, isNetworkEnabled);
         try {
-            if (isWifiEnabled) {
-                preyLocation = getDataLocationWifi(ctx,method,asynchronous,preyLocation);
-            }
-        } catch (Exception e) {
-        }
-        try {
             if(!isGooglePlayServicesAvailable||(isGpsEnabled&&!isNetworkEnabled)) {
                 preyLocation = getPreyLocationAppService(ctx,method,asynchronous,preyLocation);
             }else{
@@ -120,24 +114,10 @@ public class LocationUtil {
         PreyWebServices.getInstance().sendNotifyActionResultPreyHttp(ctx, parms);
     }
 
-    private static PreyLocation getDataLocationWifi(Context ctx, String method, boolean asynchronous, PreyLocation preyLocationOld) throws Exception {
-        PreyLocation preyLocation = null;
-        List<Wifi> listWifi = null;
-        PreyPhone preyPhone = new PreyPhone(ctx);
-        if (PreyWifiManager.getInstance(ctx).isWifiEnabled()) {
-            listWifi = preyPhone.getListWifi();
-        }
-        if (listWifi == null || listWifi.size() == 0) {
-            throw new Exception();
-        }
-        preyLocation = PreyWebServices.getInstance().getLocation(ctx, listWifi);
-        preyLocation.setMethod("wifi");
-        sendLocation(ctx, asynchronous, null, preyLocation);
-        return preyLocation;
-    }
-
-    private final static int MAXIMUM_OF_ATTEMPTS=9;
-    private final static int []SLEEP_OF_ATTEMPTS=new int[]{2,2,2,3,3,3,4,4,4};
+    //private final static int MAXIMUM_OF_ATTEMPTS=9;
+    //private final static int []SLEEP_OF_ATTEMPTS=new int[]{2,2,2,3,3,3,4,4,4};
+    private final static int MAXIMUM_OF_ATTEMPTS=5;
+    private final static int []SLEEP_OF_ATTEMPTS=new int[]{2,2,3,3,4,4};
 
     private static PreyLocation getPreyLocationPlayService(final Context ctx, String method, boolean asynchronous, PreyLocation preyLocationOld) throws Exception {
         PreyLocation preyLocation = null;
@@ -250,7 +230,7 @@ public class LocationUtil {
         parametersMap.put(ACC, Float.toString(Math.round(lastLocation.getAccuracy())));
         parametersMap.put(METHOD, lastLocation.getMethod() );
         data.addDataListAll(parametersMap);
-        PreyLogger.i("lat:"+lastLocation.getLat()+" lng:"+lastLocation.getLng()+" acc:"+lastLocation.getAccuracy()+" met:"+lastLocation.getMethod());
+        PreyLogger.d("lat:"+lastLocation.getLat()+" lng:"+lastLocation.getLng()+" acc:"+lastLocation.getAccuracy()+" met:"+lastLocation.getMethod());
         return data;
     }
 

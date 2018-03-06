@@ -37,22 +37,27 @@ public class ReportService extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
+		run(this);
+		stopSelf();
+	}
+
+	public void run(Context ctx) {
 		int interval=-1;
 		try{
 			PreyLogger.i("_____________start ReportService");
 
 
-			interval=Integer.parseInt(PreyConfig.getPreyConfig(this).getIntervalReport());
+			interval=Integer.parseInt(PreyConfig.getPreyConfig(ctx).getIntervalReport());
 			//ReportScheduled.getInstance(this).run();
 
-			String exclude=PreyConfig.getPreyConfig(getApplicationContext()).getExcludeReport();
+			String exclude=PreyConfig.getPreyConfig(ctx).getExcludeReport();
 
 			JSONArray jsonArray = new JSONArray();
 
 
 			PreyLogger.i("start report:"+interval);
 			List<HttpDataService> listData = new ArrayList<HttpDataService>();
-			Context ctx = this;
+
 
 			jsonArray = new JSONArray();
 			if (!exclude.contains("picture"))
@@ -93,19 +98,16 @@ public class ReportService extends IntentService {
 			}
 
 			if(PreyConfig.getPreyConfig(ctx).isMissing()) {
-				if (PreyConfig.getPreyConfig(ctx).isConnectionExists()) {
-					if (parms > 0) {
-						PreyHttpResponse response = PreyWebServices.getInstance().sendPreyHttpReport(ctx, listData);
-						if (response != null) {
-							PreyConfig.getPreyConfig(ctx).setLastEvent("report_send");
-							PreyLogger.d("response.getStatusCode():" + response.getStatusCode());
-							if (409 == response.getStatusCode()) {
-								ReportScheduled.getInstance(ctx).reset();
-								PreyConfig.getPreyConfig(ctx).setMissing(false);
-								PreyConfig.getPreyConfig(ctx).setIntervalReport("");
-								PreyConfig.getPreyConfig(ctx).setExcludeReport("");
-
-							}
+				if (parms > 0) {
+					PreyHttpResponse response = PreyWebServices.getInstance().sendPreyHttpReport(ctx, listData);
+					if (response != null) {
+						PreyConfig.getPreyConfig(ctx).setLastEvent("report_send");
+						PreyLogger.d("response.getStatusCode():" + response.getStatusCode());
+						if (409 == response.getStatusCode()) {
+							ReportScheduled.getInstance(ctx).reset();
+							PreyConfig.getPreyConfig(ctx).setMissing(false);
+							PreyConfig.getPreyConfig(ctx).setIntervalReport("");
+							PreyConfig.getPreyConfig(ctx).setExcludeReport("");
 						}
 					}
 				}
@@ -113,7 +115,7 @@ public class ReportService extends IntentService {
 		} catch (Exception e) {
 		}
 
-		stopSelf();
+
 
 	}
 

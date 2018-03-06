@@ -20,36 +20,43 @@ public class WipeThread extends Thread {
     private boolean wipe;
     private boolean deleteSD;
     private String messageId;
+    private String jobId;
 
-    public WipeThread(Context ctx,boolean wipe,boolean deleteSD, String messageId) {
+    public WipeThread(Context ctx,boolean wipe,boolean deleteSD, String messageId,String jobId) {
         this.ctx = ctx;
         this.deleteSD = deleteSD;
         this.wipe = wipe;
         this.messageId = messageId;
+        this.jobId = jobId;
     }
 
     public void run() {
+        String reason=null;
+        if(jobId!=null&&!"".equals(jobId)){
+            reason="{\"device_job_id\":\""+jobId+"\"}";
+        }
         PreyConfig preyConfig = PreyConfig.getPreyConfig(ctx);
-        PreyWebServices.getInstance().sendNotifyActionResultPreyHttp(ctx, UtilJson.makeMapParam("start","wipe","started",null));
+        PreyWebServices.getInstance().sendNotifyActionResultPreyHttp(ctx, UtilJson.makeMapParam("start","wipe","started",reason));
         try{
             if(deleteSD){
                 WipeUtil.deleteSD();
+                if(!wipe){
+                    PreyWebServices.getInstance().sendNotifyActionResultPreyHttp(ctx, UtilJson.makeMapParam("start","wipe","stopped",reason));
+                }
             }
         }catch(Exception e){
+            PreyWebServices.getInstance().sendNotifyActionResultPreyHttp(ctx, UtilJson.makeMapParam("start","wipe","failed",e.getMessage()));
+            PreyLogger.e("Error Wipe:"+e.getMessage(), e);
         }
         try{
             if (wipe&&preyConfig.isFroyoOrAbove()){
                 PreyLogger.d("Wiping the device!!");
+                PreyWebServices.getInstance().sendNotifyActionResultPreyHttp(ctx, UtilJson.makeMapParam("start","wipe","stopped",reason));
                 FroyoSupport.getInstance(ctx).wipe();
             }
         }catch(Exception e){
-            PreyLogger.e("Error Wipe1:"+e.getMessage(), e);
-        }
-        try{
-            PreyWebServices.getInstance().sendNotifyActionResultPreyHttp(ctx, UtilJson.makeMapParam("start","wipe","stopped",null));
-        }catch(Exception e){
             PreyWebServices.getInstance().sendNotifyActionResultPreyHttp(ctx, UtilJson.makeMapParam("start","wipe","failed",e.getMessage()));
-            PreyLogger.e("Error Wipe2:"+e.getMessage(), e);
+            PreyLogger.e("Error Wipe:"+e.getMessage(), e);
         }
     }
 

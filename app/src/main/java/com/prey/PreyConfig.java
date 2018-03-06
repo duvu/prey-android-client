@@ -90,6 +90,7 @@ public class PreyConfig {
 
     public static final String PREFS_ACCOUNT_VERIFIED="PREFS_ACCOUNT_VERIFIED";
     public static final String EMAIL="EMAIL";
+    public static final String TWO_STEP="TWO_STEP";
     public static final String PREFS_SCHEDULED="PREFS_SCHEDULED";
 
     public static final String SEND_DATA="SEND_DATA";
@@ -103,6 +104,7 @@ public class PreyConfig {
     public static final String EXCLUDE_REPORT="EXCLUDE_REPORT";
     public static final String LAST_REPORT_START_DATE="LAST_REPORT_START_DATE";
     public static final String TIMEOUT_REPORT="TIMEOUT_REPORT";
+    public static final String INTERVAL_AWARE="INTERVAL_AWARE";
 
     public static final String LOCATION_LOW_BATTERY_DATE="LOCATION_LOW_BATTERY_DATE";
     public static final String SESSION_ID="SESSION_ID";
@@ -130,7 +132,7 @@ public class PreyConfig {
     public static final String DEVICE_ID = "DEVICE_ID";
 
     public static final String SIM_SERIAL_NUMBER = "SIM_SERIAL_NUMBER";
-    public static final String VERSION_PREY_DEFAULT="1.6.8";
+    public static final String VERSION_PREY_DEFAULT="1.8.1";
 
     public static final String CAN_ACCESS_FINE_LOCATION = "CAN_ACCESS_FINE_LOCATION";
     public static final String CAN_ACCESS_COARSE_LOCATION = "CAN_ACCESS_COARSE_LOCATION";
@@ -148,7 +150,15 @@ public class PreyConfig {
 
     public static final String MESSAGE_ID="messageID";
 
+    public static final String JOB_ID="device_job_id";
 
+    public static final String UNLOCK_PASS="unlock_pass";
+
+    public static final String NOTIFICATION_ANDROID_7="notify_android_7";
+
+    public static final String JOB_ID_LOCK="job_id_lock";
+
+    public static final String AWARE="aware";
 
     private boolean securityPrivilegesAlreadyPrompted;
 
@@ -198,6 +208,10 @@ public class PreyConfig {
         cachedInstance = null;
     }
 
+    public Context getContext(){
+        return ctx;
+    }
+
     private void saveString(String key, String value){
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(ctx);
         SharedPreferences.Editor editor = settings.edit();
@@ -238,6 +252,13 @@ public class PreyConfig {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(ctx);
         SharedPreferences.Editor editor = settings.edit();
         editor.putLong(key, value);
+        editor.commit();
+    }
+
+    private void removeKey(String key){
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(ctx);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.remove(key);
         editor.commit();
     }
 
@@ -337,6 +358,26 @@ public class PreyConfig {
         this.saveString(PreyConfig.DEVICE_ID, deviceId);
     }
 
+    public String getUnlockPass(){
+        return getString(PreyConfig.UNLOCK_PASS, null);
+    }
+
+    public void setUnlockPass(String unlockPass){
+        this.saveString(PreyConfig.UNLOCK_PASS, unlockPass);
+    }
+
+    public void deleteUnlockPass(){
+        this.removeKey(PreyConfig.UNLOCK_PASS);
+    }
+
+    public String getNotificationAndroid7(){
+        return getString(PreyConfig.NOTIFICATION_ANDROID_7, null);
+    }
+
+    public void setNotificationAndroid7(String notificationAndroid7){
+        this.saveString(PreyConfig.NOTIFICATION_ANDROID_7, notificationAndroid7);
+    }
+
     public void setSecurityPrivilegesAlreadyPrompted(boolean securityPrivilegesAlreadyPrompted) {
         this.securityPrivilegesAlreadyPrompted = securityPrivilegesAlreadyPrompted;
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -379,6 +420,10 @@ public class PreyConfig {
         return android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
     }
 
+    public boolean isNougatOrAbove() {
+        return android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N;
+    }
+
     public String getLastEvent() {
         return getString(PreyConfig.LAST_EVENT, null);
     }
@@ -403,6 +448,15 @@ public class PreyConfig {
         this.saveString(PreyConfig.PREVIOUS_SSID, previousSsid);
     }
 
+    public void removeDeviceId(){
+        this.removeKey(PreyConfig.DEVICE_ID);
+    }
+    public void removeEmail(){
+        this.removeKey(PreyConfig.EMAIL);
+    }
+    public void removeApiKey(){
+        this.removeKey(PreyConfig.API_KEY);
+    }
 
     public boolean isThisDeviceAlreadyRegisteredWithPrey(boolean notifyUser) {
         String deviceId = getString(PreyConfig.DEVICE_ID, null);
@@ -416,17 +470,29 @@ public class PreyConfig {
     }
 
     public boolean isSimChanged() {
-
-        String simSerial=new PreyPhone(ctx).getSimSerialNumber();
-        PreyLogger.i("simSerial:" + simSerial + " actual:" + getSimSerialNumber());
-        if (getSimSerialNumber()==null||"".equals(getSimSerialNumber())){
-            if(simSerial!=null&&!"".equals(simSerial)){
-                this.setSimSerialNumber(simSerial);
+        String nowSimSerialNumber=new PreyPhone(ctx).getSimSerialNumber();
+        String currentSimSerialNumber=getSimSerialNumber();
+        PreyLogger.i("______________________________isSimChanged_______________");
+        PreyLogger.i("SimSerialNumber now:" + nowSimSerialNumber + " current:" + currentSimSerialNumber);
+        if (currentSimSerialNumber==null||"".equals(currentSimSerialNumber)){  //empty
+            if(nowSimSerialNumber!=null&&!"".equals(nowSimSerialNumber)){
+                this.setSimSerialNumber(nowSimSerialNumber);
+                PreyLogger.i("init setSimSerialNumber :"+nowSimSerialNumber);
+            }else{
+                PreyLogger.i("nothing setSimSerialNumber 1");
             }
-            return false;
-        }
-        if(simSerial!=null&&!"".equals(simSerial)&&!simSerial.equals(this.getSimSerialNumber())){
-            return true;
+        }else{
+            if(nowSimSerialNumber!=null&&!"".equals(nowSimSerialNumber)){ //not empty
+                if(!currentSimSerialNumber.equals(nowSimSerialNumber)){
+                    this.setSimSerialNumber(nowSimSerialNumber);
+                    PreyLogger.i("update setSimSerialNumber :"+nowSimSerialNumber);
+                    return true;
+                }else{
+                    PreyLogger.i("nothing setSimSerialNumber 2");
+                }
+            }else{
+                PreyLogger.i("nothing setSimSerialNumber 3");
+            }
         }
         return false;
     }
@@ -614,11 +680,11 @@ public class PreyConfig {
         return FileConfigReader.getInstance(this.ctx).getPreyGooglePlay();
     }
     public String getPreyUninstallUrl() {
-        String url = FileConfigReader.getInstance(this.ctx).getPreyUninstall();
-        PreyLogger.i(url);
-        return url;
+        return FileConfigReader.getInstance(this.ctx).getPreyUninstall();
     }
-
+    public String getPreyUninstallEsUrl() {
+        return FileConfigReader.getInstance(this.ctx).getPreyUninstallEs();
+    }
     public String getApiKeyBatch() {
         return FileConfigReader.getInstance(this.ctx).getApiKeyBatch();
     }
@@ -654,6 +720,15 @@ public class PreyConfig {
     public void setEmail(String email) {
         saveString(PreyConfig.EMAIL, email);
     }
+
+    public boolean getTwoStep() {
+        return getBoolean(PreyConfig.TWO_STEP, false);
+    }
+
+    public void setTwoStep(boolean twoStep) {
+        saveBoolean(PreyConfig.TWO_STEP, twoStep);
+    }
+
 
     public void setAccountVerified() {
         saveBoolean(PreyConfig.PREFS_ACCOUNT_VERIFIED, true);
@@ -771,6 +846,17 @@ public class PreyConfig {
     public long getLastReportStartDate(){
         return getLong(PreyConfig.LAST_REPORT_START_DATE, 0);
     }
+
+
+    public String getIntervalAware(){
+        return getString(PreyConfig.INTERVAL_AWARE,"");
+    }
+
+    public void setIntervalAware(String intervalAware) {
+
+        this.saveString(PreyConfig.INTERVAL_AWARE, intervalAware);
+    }
+
 
     public void setInstallationDate(long installationDate){
         saveLong(PreyConfig.INSTALLATION_DATE, installationDate);
@@ -906,5 +992,25 @@ public class PreyConfig {
     public void setLastEventGeo(String lastEventGeo) {
         PreyLogger.d("lastEventGeo["+lastEventGeo+"]");
         saveString(PreyConfig.LAST_EVENT_GEO, lastEventGeo);
+    }
+
+    public boolean isChromebook() {
+        return ctx.getPackageManager().hasSystemFeature("org.chromium.arc.device_management");
+    }
+
+    public String getJobIdLock(){
+        return getString(PreyConfig.JOB_ID_LOCK, "");
+    }
+
+    public void setJobIdLock(String jobIdLock) {
+        saveString(PreyConfig.JOB_ID_LOCK, jobIdLock);
+    }
+
+    public boolean getAware() {
+        return getBoolean(PreyConfig.AWARE, false);
+    }
+
+    public void setAware(boolean aware) {
+        this.saveBoolean(PreyConfig.AWARE, aware);
     }
 }

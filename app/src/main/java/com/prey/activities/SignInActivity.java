@@ -29,6 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.prey.actions.aware.AwareConfig;
 import com.prey.barcodereader.BarcodeActivity;
 import com.prey.PreyAccountData;
 import com.prey.PreyConfig;
@@ -153,11 +154,11 @@ public class SignInActivity extends Activity {
                 if (email == null || email.equals("") || password == null || password.equals("")) {
                     Toast.makeText(ctx, R.string.error_all_fields_are_required, Toast.LENGTH_LONG).show();
                 } else {
-                    if (email.length() < 6 || email.length() > 100) {
-                        Toast.makeText(ctx, ctx.getString(R.string.error_mail_out_of_range, 6, 100), Toast.LENGTH_LONG).show();
+                    if (email.length() < 6 || email.length() > 200) {
+                        Toast.makeText(ctx, ctx.getString(R.string.error_mail_out_of_range, "6", "256"), Toast.LENGTH_LONG).show();
                     } else {
-                        if (password.length() < 6 || password.length() > 32) {
-                            Toast.makeText(ctx, ctx.getString(R.string.error_password_out_of_range, 6, 32), Toast.LENGTH_LONG).show();
+                        if (password.length() < 6 || password.length() > 256) {
+                            Toast.makeText(ctx, ctx.getString(R.string.error_password_out_of_range, "6", "256"), Toast.LENGTH_LONG).show();
                         } else {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
                                 new AddDeviceToAccount().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, email, password, PreyUtils.getDeviceType(ctx));
@@ -286,6 +287,13 @@ public class SignInActivity extends Activity {
                 PreyConfig.getPreyConfig(getApplicationContext()).saveAccount(accountData);
                 PreyConfig.getPreyConfig(getApplication()).registerC2dm();
                 PreyWebServices.getInstance().sendEvent(getApplication(), PreyConfig.ANDROID_SIGN_IN);
+                String email=PreyWebServices.getInstance().getEmail(getApplicationContext());
+                PreyConfig.getPreyConfig(getApplicationContext()).setEmail(email);
+                new Thread() {
+                    public void run() {
+                        AwareConfig.getAwareConfig(getApplicationContext()).init();
+                    }
+                }.start();
             } catch (PreyException e) {
                 error = e.getMessage();
                 try {
@@ -313,7 +321,13 @@ public class SignInActivity extends Activity {
                     String message = getString(R.string.device_added_congratulations_text);
                     Bundle bundle = new Bundle();
                     bundle.putString("message", message);
-                    Intent intent = new Intent(SignInActivity.this, PermissionInformationActivity.class);
+                    Intent intent =null;
+                    if (PreyConfig.getPreyConfig(SignInActivity.this).isChromebook()) {
+                        intent = new Intent(SignInActivity.this, WelcomeActivity.class);
+                        PreyConfig.getPreyConfig(SignInActivity.this).setProtectReady(true);
+                    }else {
+                        intent = new Intent(SignInActivity.this, PermissionInformationActivity.class);
+                    }
                     intent.putExtras(bundle);
                     startActivity(intent);
                     finish();

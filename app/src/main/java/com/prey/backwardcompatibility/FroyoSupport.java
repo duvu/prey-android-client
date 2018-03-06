@@ -16,6 +16,7 @@ import android.telephony.TelephonyManager;
 
 import com.prey.PreyConfig;
 import com.prey.PreyLogger;
+import com.prey.exceptions.PreyException;
 import com.prey.receivers.PreyDeviceAdmin;
 
 @TargetApi(Build.VERSION_CODES.FROYO)
@@ -39,26 +40,32 @@ public class FroyoSupport {
         ctx = context;
     }
 
-    public void changePasswordAndLock(String newPass, boolean lock) {
+    public void changePasswordAndLock(String newPass, boolean lock) throws PreyException{
         try {
+            PreyLogger.i("change0");
             if (isAdminActive()) {
+                PreyLogger.i("change1");
+
                 try {
                     policyManager.setPasswordMinimumLength(deviceAdmin, 0);
                     policyManager.setPasswordQuality(deviceAdmin, DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED);
+                    policyManager.resetPassword(newPass, DevicePolicyManager.RESET_PASSWORD_REQUIRE_ENTRY);
+                    if ("".equals(newPass))
+                        android.provider.Settings.System.putInt(ctx.getContentResolver(), android.provider.Settings.System.LOCK_PATTERN_ENABLED, 0);
                 } catch (Exception e1) {
+                    if (lock) {
+                        lockNow();
+                    }
+                    PreyLogger.e("locked:"+e1.getMessage(),e1);
+                    throw new PreyException("This device couldn't be locked");
                 }
 
-                boolean resultLocK = policyManager.resetPassword(newPass, DevicePolicyManager.RESET_PASSWORD_REQUIRE_ENTRY);
-
-                if ("".equals(newPass))
-                    android.provider.Settings.System.putInt(ctx.getContentResolver(), android.provider.Settings.System.LOCK_PATTERN_ENABLED, 0);
-
-                PreyLogger.i("resultLocK:" + resultLocK);
-                if (lock)
+                if (lock){
                     lockNow();
+                }
             }
         } catch (Exception e) {
-            PreyLogger.e("This device couldn't be locked. Honeycomb bug?", e);
+            throw new PreyException("This device couldn't be locked");
         }
     }
 

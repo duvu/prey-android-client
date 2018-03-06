@@ -8,6 +8,8 @@ package com.prey.actions.picture;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import android.Manifest;
 import android.content.Context;
@@ -30,7 +32,7 @@ public class PictureUtil {
     public static HttpDataService getPicture(Context ctx) {
         HttpDataService data = null;
         try {
-
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmZ");
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M
                     || ActivityCompat.checkSelfPermission(ctx, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
                     ) {
@@ -45,6 +47,7 @@ public class PictureUtil {
                     entityFile.setMimeType("image/png");
                     entityFile.setName("picture.jpg");
                     entityFile.setType("picture");
+                    entityFile.setIdFile(sdf.format(new Date()) + "_" + entityFile.getType());
                     entityFile.setLength(frontPicture.length);
                     data.addEntityFile(entityFile);
                 }
@@ -60,6 +63,7 @@ public class PictureUtil {
                         entityFile.setMimeType("image/png");
                         entityFile.setName("screenshot.jpg");
                         entityFile.setType("screenshot");
+                        entityFile.setIdFile(sdf.format(new Date()) + "_" + entityFile.getType());
                         entityFile.setLength(backPicture.length);
                         data.addEntityFile(entityFile);
                     }
@@ -90,9 +94,15 @@ public class PictureUtil {
         ctx.startActivity(intent);
         int i = 0;
         mgr = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
-        mgr.setStreamSolo(streamType, true);
-        mgr.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-        mgr.setStreamMute(streamType, true);
+        //mgr.setStreamSolo(streamType, true);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            mgr.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+            mgr.setStreamMute(streamType, true);
+        }else{
+            final int setVolFlags = AudioManager.FLAG_PLAY_SOUND;
+            mgr.setStreamVolume(AudioManager.STREAM_MUSIC, 0, setVolFlags);
+        }
+
         while (SimpleCameraActivity.activity == null&& i < 10) {
             try {
                 Thread.sleep(1000);
@@ -107,9 +117,11 @@ public class PictureUtil {
             Thread.sleep(4000);
         } catch (InterruptedException e) {
         }
-        mgr.setStreamSolo(streamType, false);
-        mgr.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-        mgr.setStreamMute(streamType, false);
+        //mgr.setStreamSolo(streamType, false);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            mgr.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+            mgr.setStreamMute(streamType, false);
+        }
         try {
             i = 0;
             while (SimpleCameraActivity.activity != null && SimpleCameraActivity.dataImagen == null && i < 5) {

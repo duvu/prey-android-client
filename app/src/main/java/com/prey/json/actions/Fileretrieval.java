@@ -33,9 +33,18 @@ public class Fileretrieval {
             PreyLogger.d("messageId:"+messageId);
         } catch (Exception e) {
         }
+        String reason = null;
+        try {
+            String jobId = parameters.getString(PreyConfig.JOB_ID);
+            PreyLogger.d("jobId:"+jobId);
+            if(jobId!=null&&!"".equals(jobId)){
+                reason="{\"device_job_id\":\""+jobId+"\"}";
+            }
+        } catch (Exception e) {
+        }
         try {
             PreyLogger.d("Fileretrieval started");
-            PreyWebServices.getInstance().sendNotifyActionResultPreyHttp(ctx, "processed", messageId, UtilJson.makeMapParam("start", "fileretrieval", "started",null));
+            PreyWebServices.getInstance().sendNotifyActionResultPreyHttp(ctx, "processed", messageId, UtilJson.makeMapParam("start", "fileretrieval", "started",reason));
             String path = parameters.getString("path");
             String fileId = parameters.getString("file_id");
             if(fileId==null||"".equals(fileId)||"null".equals(fileId)){
@@ -50,11 +59,11 @@ public class Fileretrieval {
             FileretrievalDatasource datasource=new FileretrievalDatasource(ctx);
             datasource.createGeofence(fileDto);
             responseCode=PreyWebServices.getInstance().uploadFile(ctx, file, fileId,0);
-            PreyLogger.i("responseCode:"+responseCode);
+            //PreyLogger.i("responseCode:"+responseCode);
             if(responseCode==200||responseCode==201) {
                 datasource.deleteFileretrieval(fileId);
             }
-            PreyWebServices.getInstance().sendNotifyActionResultPreyHttp(ctx, UtilJson.makeMapParam("start", "fileretrieval", "stopped",null));
+            PreyWebServices.getInstance().sendNotifyActionResultPreyHttp(ctx, UtilJson.makeMapParam("start", "fileretrieval", "stopped",reason));
             PreyLogger.d("Fileretrieval stopped");
         }catch(Exception e){
             PreyWebServices.getInstance().sendNotifyActionResultPreyHttp(ctx, messageId, UtilJson.makeMapParam("start", "fileretrieval", "failed", e.getMessage()));
